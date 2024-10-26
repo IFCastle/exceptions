@@ -18,7 +18,7 @@ class TestClass
 
 class ArraySerializerTraitTest extends \PHPUnit\Framework\TestCase
 {
-    public function testErrors_to_array()
+    public function testErrors_to_array(): void
     {
         $testedObject                   = new TestClass();
 
@@ -120,7 +120,7 @@ class ArraySerializerTraitTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(8, $res['code']);
     }
 
-    public function testArray_to_errors()
+    public function testArray_to_errors(): void
     {
         $testedObject                   = new TestClass();
 
@@ -158,7 +158,7 @@ class ArraySerializerTraitTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testArray_to_errors_error()
+    public function testArray_to_errors_error(): void
     {
         $testedObject                   = new TestClass();
 

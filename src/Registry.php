@@ -7,11 +7,11 @@ namespace IfCastle\Exceptions;
 /**
  * Register of exceptions.
  *
- * This is a static class which used as global registry for exceptions.
+ * This is a static class used as global registry for exceptions.
  * It defines the internal storage for exceptions which can be redefined by a programmer.
  *
- * Really this class not log an exception.
- * It's stores them until called $save_handler.
+ * Really, this class does not log an exception.
+ * It stores them until called $saveHandler.
  */
 class Registry
 {
@@ -83,7 +83,7 @@ class Registry
      */
     public static function registerException(mixed $exception): void
     {
-        if (!($exception instanceof \Throwable || $exception instanceof BaseExceptionInterface)) {
+        if (!$exception instanceof \Throwable && !$exception instanceof BaseExceptionInterface) {
             return;
         }
 
@@ -104,11 +104,15 @@ class Registry
         if (\is_array(self::$exceptions)) {
             return self::$exceptions;
         }
+
         if (self::$exceptions instanceof StorageInterface) {
+
             $result = self::$exceptions->getStorageExceptions();
+            
             if (!\is_array($result)) {
                 return [new \UnexpectedValueException('StorageI->get_storage() return not array')];
             }
+
             return $result;
         }
 
@@ -214,6 +218,7 @@ class Registry
         self::$LoggerOptions instanceof \ArrayAccess) {
             return self::$LoggerOptions;
         }
+
         return [];
     }
 
@@ -267,7 +272,7 @@ class Registry
     {
         if ($exception instanceof BaseExceptionInterface === false) {
             self::registerException($exception);
-        } elseif (!($exception->isLoggable() || $exception->isContainer())) {
+        } elseif (!$exception->isLoggable() && !$exception->isContainer()) {
             // When exception reaches this handler
             // its not logged if:
             // - already was logged
@@ -327,7 +332,7 @@ class Registry
             return true;
         }
 
-        // if namespaces not defined - return
+        // if namespaces aren't defined - return
         if (\is_null($class) || empty(self::$DebugOptions['namespaces'])) {
             return false;
         }

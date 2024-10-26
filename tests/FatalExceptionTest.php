@@ -12,7 +12,7 @@ use IfCastle\Exceptions\Errors\Error;
  */
 class FatalExceptionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         // 1. Случай контейнер для исключения \Exception
         $exception = new \Exception('message', 123);

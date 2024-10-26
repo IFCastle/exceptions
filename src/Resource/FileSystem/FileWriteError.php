@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IfCastle\Exceptions\Resource\FileSystem;
 
-use Exceptions\Resource\ResourceWriteError;
+use IfCastle\Exceptions\Resource\ResourceWriteError;
 
 class FileWriteError extends ResourceWriteError implements FileSystemExceptionInterface
 {

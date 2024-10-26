@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IfCastle\Exceptions\Resource\FileSystem;
 
-use Exceptions\Resource\ResourceUnLockFailed;
+use IfCastle\Exceptions\Resource\ResourceUnLockFailed;
 
 class FileUnLockFailed extends ResourceUnLockFailed implements FileSystemExceptionInterface
 {

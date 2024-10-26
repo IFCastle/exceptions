@@ -17,6 +17,7 @@ class Storage implements StorageInterface
      *
      * @return      StorageInterface
      */
+    #[\Override]
     public function addException(BaseExceptionInterface|\Throwable $exception): static
     {
         $this->Exceptions[] = $exception;
@@ -24,11 +25,13 @@ class Storage implements StorageInterface
         return $this;
     }
 
+    #[\Override]
     public function getStorageExceptions(): array
     {
         return $this->Exceptions;
     }
 
+    #[\Override]
     public function resetStorage(): static
     {
         $this->Exceptions = [];

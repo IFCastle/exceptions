@@ -8,4 +8,4 @@ namespace IfCastle\Exceptions\Errors;
  * Class for warnings.
  *
  */
-class Warning extends Error {}
+final class Warning extends Error {}

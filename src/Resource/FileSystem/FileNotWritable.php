@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace IfCastle\Exceptions\Resource\FileSystem;
 
-use Exceptions\Resource\ResourceNotWritable;
+use IfCastle\Exceptions\Resource\ResourceNotWritable;
 
 class FileNotWritable extends ResourceNotWritable implements FileSystemExceptionInterface
 {
     protected string $system   = self::SYSTEM;
 
-    public function __construct($resource, $type = 'file')
+    public function __construct($resource, string $type = 'file')
     {
         parent::__construct($resource, $type);
     }

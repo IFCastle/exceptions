@@ -5,69 +5,77 @@ declare(strict_types=1);
 namespace IfCastle\Exceptions;
 
 /**
- * Main interface for BaseExceptionI.
+ * Main interface for BaseException.
  */
-interface BaseExceptionInterface
+interface BaseExceptionInterface extends \Stringable
 {
     /**
      * The System is unusable.
      */
-    final public const EMERGENCY    = 1;
+    final public const int EMERGENCY = 1;
 
     /**
      * Immediate action required.
      */
-    final public const ALERT         = 2;
+    final public const int ALERT    = 2;
 
     /**
      * Critical conditions.
      */
-    final public const CRITICAL      = 3;
+    final public const int CRITICAL = 3;
 
     /**
      * Error conditions.
      */
-    final public const ERROR         = 4;
+    final public const int ERROR    = 4;
 
     /**
      * Warning conditions.
      */
-    final public const WARNING       = 5;
+    final public const int WARNING  = 5;
 
     /**
      * Normal but significant.
      */
-    final public const NOTICE        = 6;
+    final public const int NOTICE   = 6;
 
     /**
      * Informational.
      */
-    final public const INFO          = 7;
+    final public const int INFO = 7;
 
     /**
      * 	Debug-level messages.
      */
-    final public const DEBUG         = 8;
+    final public const int DEBUG = 8;
 
     /**
      * Mode for raise of exception.
      */
-    final public const RISE          = false;
+    final public const false RISE = false;
+
     /**
      * Mode for mute of exception.
      */
-    final public const MUTE          = true;
+    final public const true MUTE = true;
+
     /**
      * Mode, then function returns exception.
      */
-    final public const RESULT        = 1;
+    final public const int RESULT = 1;
 
     public function getMessage();
+
     public function getPrevious();
+
     public function getCode();
+
     public function getFile();
+
     public function getLine();
+
     public function getTrace();
+
     public function getTraceAsString();
 
     /**

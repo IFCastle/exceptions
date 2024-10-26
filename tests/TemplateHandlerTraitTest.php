@@ -16,6 +16,7 @@ class TestedTemplateHandler
      * @param string $value
      *
      */
+    #[\Override]
     protected function toString(mixed $value, bool $isQuoted = false, int $arrayMax = 5): string
     {
         if ($isQuoted) {
@@ -35,7 +36,7 @@ class TemplateHandlerTraitTest extends \PHPUnit\Framework\TestCase
      * @param string|array $message
      */
     #[DataProvider('dataProvider')]
-    public function test(mixed $template, array $data, string|array|\ArrayObject $message, int|string $code, ?\Throwable $previous = null, mixed $expected = null)
+    public function test(mixed $template, array $data, string|array|\ArrayObject $message, int|string $code, ?\Throwable $previous = null, mixed $expected = null): void
     {
         $testedObject           = new \IfCastle\Exceptions\TestedTemplateHandler();
 
@@ -47,7 +48,7 @@ class TemplateHandlerTraitTest extends \PHPUnit\Framework\TestCase
             } catch (\Throwable $e) {
             }
 
-            $this->assertInstanceOf(\get_class($expected), $e);
+            $this->assertInstanceOf($expected::class, $e);
         } else {
             $result        = $testedObject->_handleTemplate($template, $data, $message, $code, $previous);
             $this->assertEquals($expected, $result);

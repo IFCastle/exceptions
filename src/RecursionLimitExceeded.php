@@ -14,14 +14,14 @@ class RecursionLimitExceeded extends LoggableException
     /**
      * Reached a maximum depth of recursion.
      *
-     * @param       int|array           $limit          maximum depth
+     * @param       int|string|array           $limit          maximum depth
      */
-    public function __construct($limit)
+    public function __construct(array|string|int $limit)
     {
         if (!\is_scalar($limit)) {
             parent::__construct($limit);
         } else {
-            parent::__construct(['limit' => $limit]);
+            parent::__construct(['limit' => (int)$limit]);
         }
     }
 }

@@ -41,25 +41,32 @@ trait HelperTrait
         if (\is_bool($value)) {
             return $value ? 'TRUE' : 'FALSE';
         }
+
         if (\is_object($value)) {
             return \get_debug_type($value);
         }
+
         if (\is_null($value)) {
             return 'NULL';
         }
+
         if (\is_string($value)) {
             return 'STRING';
         }
+
         if (\is_int($value)) {
             return 'INTEGER';
         }
+
         if (\is_float($value)) {
             // is_double some
             return 'DOUBLE';
         }
+
         if (\is_array($value)) {
             return 'ARRAY(' . \count($value) . ')';
         }
+
         if (\is_resource($value)) {
             $type           = \get_resource_type($value);
             $meta           = '';
@@ -71,6 +78,7 @@ trait HelperTrait
                 );
                 $meta       = " ({$meta['stream_type']}, {$meta['wrapper_type']}, {$meta['mode']}) {$meta['uri']}";
             }
+
             return 'RESOURCE: ' . $type . $meta;
         }
 

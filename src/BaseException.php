@@ -371,7 +371,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
     {
         return $this->debugData;
     }
-
+    
     /**
      * The method serialized object to an array.
      */
@@ -403,12 +403,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
         }
 
         // override the exception message if the template was defined
-        if ($this->template() !== '') {
-
-            $message    = $this->getExceptionData()['message'] ?? '';
-        } else {
-            $message    = $this->getMessage();
-        }
+        $message = $this->template() !== '' ? $this->getExceptionData()['message'] ?? '' : $this->getMessage();
 
         return
         [

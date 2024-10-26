@@ -10,17 +10,16 @@ namespace IfCastle\Exceptions;
 class UnexpectedValue extends LoggableException
 {
     protected string $template      = 'Unexpected value {value} occurred in the variable {name}';
-
+    
     /**
-     * The variable has unexpected value!
+     * The variable has an unexpected value!
      *
-     * @param       string|array        $name           Variable name
+     * @param string|array $name                        Variable name
      *                                                  or list of parameters for exception
-     * @param       mixed               $value          Value
-     * @param       string              $rules          Rules description
-     *
+     * @param mixed        $value                       Value
+     * @param string|class-string|null  $rules          Rules description
      */
-    public function __construct($name, $value = null, $rules = null)
+    public function __construct(array|string $name, mixed $value = null, string|null $rules = null)
     {
         if (!\is_scalar($name)) {
             parent::__construct($name);

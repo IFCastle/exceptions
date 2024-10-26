@@ -13,7 +13,7 @@ use IfCastle\Exceptions\RuntimeExceptionInterface;
  * -  WARNING or NOTICE - not is logged.
  *
  */
-class UserError extends Error implements RuntimeExceptionInterface
+final class UserError extends Error implements RuntimeExceptionInterface
 {
     public function __construct(int $code, string $message, string $file, int $line)
     {

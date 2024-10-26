@@ -10,7 +10,7 @@ use IfCastle\Exceptions\BaseExceptionInterface;
  * The class for encapsulating of PHP Errors
  * as object BaseExceptionI.
  */
-class Error implements BaseExceptionInterface, \Stringable
+class Error implements BaseExceptionInterface
 {
     /**
   * Conformity between PHP-errors and BaseExceptionI.
@@ -113,41 +113,49 @@ class Error implements BaseExceptionInterface, \Stringable
     */
     public function __construct(protected int $code, protected string $message, protected string $file, protected int $line) {}
 
+    #[\Override]
     public function getMessage(): string
     {
         return $this->message;
     }
 
-    public function getPrevious()
+    #[\Override]
+    public function getPrevious(): null
     {
         return null;
     }
 
+    #[\Override]
     public function getTags(): array
     {
         return [];
     }
 
+    #[\Override]
     public function getCode(): int
     {
         return $this->code;
     }
 
+    #[\Override]
     public function getFile(): string
     {
         return $this->file;
     }
 
+    #[\Override]
     public function getLine(): int
     {
         return $this->line;
     }
 
+    #[\Override]
     public function getTrace(): ?array
     {
         return $this->trace;
     }
 
+    #[\Override]
     public function getTraceAsString(): string
     {
         if (empty($this->trace)) {
@@ -157,11 +165,13 @@ class Error implements BaseExceptionInterface, \Stringable
         return \print_r($this->trace, true);
     }
 
+    #[\Override]
     public function isLoggable(): bool
     {
         return $this->isLoggable;
     }
 
+    #[\Override]
     public function setLoggable(bool $flag): static
     {
         $this->isLoggable = $flag;
@@ -169,11 +179,13 @@ class Error implements BaseExceptionInterface, \Stringable
         return $this;
     }
 
+    #[\Override]
     public function isFatal(): bool
     {
         return $this->isFatal;
     }
 
+    #[\Override]
     public function markAsFatal(): static
     {
         $this->isFatal = true;
@@ -181,6 +193,7 @@ class Error implements BaseExceptionInterface, \Stringable
         return $this;
     }
 
+    #[\Override]
     public function isContainer(): bool
     {
         return false;
@@ -189,6 +202,7 @@ class Error implements BaseExceptionInterface, \Stringable
     /**
      * Returns level of error.
      */
+    #[\Override]
     public function getLevel(): int
     {
         if (!\array_key_exists($this->code, self::$ERRORS)) {
@@ -198,26 +212,31 @@ class Error implements BaseExceptionInterface, \Stringable
         return self::$ERRORS[$this->code];
     }
 
+    #[\Override]
     public function getSource(): array
     {
         return ['source' => $this->getFile(), 'type' => '', 'function' => ''];
     }
 
+    #[\Override]
     public function getPreviousException(): \Throwable|BaseExceptionInterface|null
     {
         return null;
     }
 
+    #[\Override]
     public function getExceptionData(): array
     {
         return [];
     }
 
+    #[\Override]
     public function getDebugData(): array
     {
         return [];
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return
@@ -230,12 +249,14 @@ class Error implements BaseExceptionInterface, \Stringable
         ];
     }
 
+    #[\Override]
     public function appendData(array $data): static
     {
         /** nothing to do */
         return $this;
     }
 
+    #[\Override]
     public function template(): string
     {
         return '';

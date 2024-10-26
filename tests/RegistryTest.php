@@ -11,7 +11,7 @@ use IfCastle\Exceptions\Errors\Error;
  *
  * @param       callback      $handler
  */
-function register_shutdown_function($handler)
+function register_shutdown_function($handler): void
 {
     $GLOBALS['shutdown_function'] = $handler;
 }
@@ -43,6 +43,7 @@ class ExceptionHandler implements \IfCastle\Exceptions\HandlerInterface
      *
      *
      */
+    #[\Override]
     public function exceptionHandler(\Throwable|\IfCastle\Exceptions\BaseExceptionInterface $exception): void
     {
         \call_user_func($this->handler, $exception);
@@ -66,6 +67,7 @@ class SaveHandler implements SaveHandlerInterface
      *
      *
      */
+    #[\Override]
     public function saveExceptions(array $exceptions, callable $resetLog, array $loggerOptions = [], array $debugOptions = []): void
     {
         \call_user_func($this->handler, $exceptions, $resetLog, $loggerOptions, $debugOptions);
@@ -92,6 +94,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
+    #[\Override]
     protected function setUp(): void
     {
         Registry::resetExceptionLog();
@@ -115,6 +118,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
+    #[\Override]
     protected function tearDown(): void
     {
         Registry::restoreGlobalHandlers();
@@ -146,7 +150,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
     /**
      * Testing the Exception Log.
      */
-    public function testRegister_exception()
+    public function testRegister_exception(): void
     {
         $exceptions = [];
 
@@ -166,32 +170,27 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
             $this->assertTrue($exception === $expected);
         }
 
-        $this->assertTrue(\count($exceptions) === 0, '$exceptions contains unknowns elements');
+        $this->assertTrue($exceptions === [], '$exceptions contains unknowns elements');
     }
 
     /**
      * These exceptions should not be logged.
      */
-    public function testRegister_exception_null()
+    public function testRegister_exception_null(): void
     {
         Registry::registerException([]);
 
         $exceptions = Registry::getExceptionLog();
 
-        $this->assertTrue(\count($exceptions) === 0, '$exceptions contains unknowns elements');
+        $this->assertTrue($exceptions === [], '$exceptions contains unknowns elements');
     }
 
     /**
      * Testing global handlers.
      */
-    public function _testInstall_global_handlers()
+    public function _testInstall_global_handlers(): void
     {
         Registry::installGlobalHandlers();
-
-        // WARNING
-        /** @noinspection PhpUndefinedConstantInspection */
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        $test                       = CONSTANT_UNDEFINED;
 
         $exceptions                 = Registry::getExceptionLog();
 
@@ -214,7 +213,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         Registry::restoreGlobalHandlers();
     }
 
-    public function testExceptionHandler()
+    public function testExceptionHandler(): void
     {
         // Should be registered in constructor
         $exception  = new LoggableException('test');

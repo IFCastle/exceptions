@@ -8,4 +8,4 @@ namespace IfCastle\Exceptions\Errors;
  * Class for notice.
  *
  */
-class Notice extends Error {}
+final class Notice extends Error {}

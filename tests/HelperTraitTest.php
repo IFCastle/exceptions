@@ -17,7 +17,7 @@ class TestedClass
 
 class HelperTraitTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetSourceFor()
+    public function testGetSourceFor(): void
     {
         $testedObject           = new TestedClass();
 
@@ -25,7 +25,7 @@ class HelperTraitTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [
-                'source'        => __CLASS__,
+                'source'        => self::class,
                 'type'          => '->',
                 'function'      => 'testGetSourceFor',
             ],
@@ -34,7 +34,7 @@ class HelperTraitTest extends \PHPUnit\Framework\TestCase
 
         $result                 = $testedObject->_getSourceFor(new \Exception('this'), true);
 
-        $this->assertEquals(__CLASS__ . '->testGetSourceFor', $result);
+        $this->assertEquals(self::class . '->testGetSourceFor', $result);
     }
 
     public static function dataProviderGetValueType(): array
@@ -103,7 +103,7 @@ class HelperTraitTest extends \PHPUnit\Framework\TestCase
         $string                 = \array_fill(0, 256, 'A');
         $expected               = \array_fill(0, 255, 'A');
 
-        $data_set[]             = [\implode($string), true, "'" . \implode($expected) . "…'"];
+        $data_set[]             = [\implode('', $string), true, "'" . \implode('', $expected) . "…'"];
 
         return $data_set;
     }
@@ -114,7 +114,7 @@ class HelperTraitTest extends \PHPUnit\Framework\TestCase
      * @param   string      $expected
      */
     #[DataProvider('dataProviderToString')]
-    public function testToString($value, $is_quoted, $expected)
+    public function testToString($value, $is_quoted, $expected): void
     {
         $testedObject           = new TestedClass();
 

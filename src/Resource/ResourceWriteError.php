@@ -6,7 +6,7 @@ namespace IfCastle\Exceptions\Resource;
 
 class ResourceWriteError extends ResourceException
 {
-    public function __construct($resource, $type = 'resource')
+    public function __construct($resource, string $type = 'resource')
     {
         parent::__construct($resource, $type, 'write');
     }

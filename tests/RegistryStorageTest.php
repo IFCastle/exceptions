@@ -20,6 +20,7 @@ class RegistryStorageTest extends \IfCastle\Exceptions\RegistryTest
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
+    #[\Override]
     protected function setUp(): void
     {
         \IfCastle\Exceptions\RegistryTest::setUp();
@@ -40,7 +41,7 @@ class RegistryStorageTest extends \IfCastle\Exceptions\RegistryTest
 
         \IfCastle\Exceptions\Registry::resetExceptionLog();
 
-        $this->assertTrue(\count(Registry::getExceptionLog()) === 0, 'get_exception_log must have 0 items');
+        $this->assertTrue(Registry::getExceptionLog() === [], 'get_exception_log must have 0 items');
         $this->assertTrue(\count($this->Storage->Exceptions) === 0, '$this->Storage->Exceptions must have 0 items');
     }
 }

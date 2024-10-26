@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IfCastle\Exceptions\Resource;
 
-use Exceptions\SystemException;
+use IfCastle\Exceptions\SystemException;
 
 /**
  * The basic class for exceptions related to resources.
@@ -19,21 +19,30 @@ class ResourceException extends SystemException
     protected string $system    = 'undefined';
 
     /**
-     * @param       string|object|array $resource
+     * @param       string|object|resource|array $resource
      * @param       string              $operation
      * @param       string              $type
      */
-    public function __construct($resource, $type = '', $operation = '')
+    public function __construct(mixed $resource, string $type = '', string $operation = '')
     {
-        if (!\is_scalar($resource)) {
+        if (\is_array($resource)) {
             parent::__construct($resource);
         } else {
+            
+            if(is_resource($resource)) {
+                $resource = get_resource_type($resource);
+            } elseif(is_object($resource)) {
+                $resource = $resource::class;
+            } elseif(!is_string($resource)) {
+                $resource = '!unknown!';
+            }
+            
             parent::__construct([
-                'message'   => $this->resource_system() . ' error: operation "' . $operation . '" failed',
+                'message'   => $this->resourceSystem() . ' error: operation "' . $operation . '" failed',
                 'resource'  => $resource,
                 'operation' => $operation,
                 'type'      => $type,
-                'system'    => $this->resource_system(),
+                'system'    => $this->resourceSystem(),
             ]);
         }
     }
@@ -42,7 +51,7 @@ class ResourceException extends SystemException
      * Method return Resource.
      *
      */
-    public function resource()
+    public function resource(): string
     {
         return $this->data['resource'] ?? '';
     }
@@ -51,7 +60,7 @@ class ResourceException extends SystemException
      * Method return system of Resource.
      * @return string
      */
-    public function resource_system()
+    public function resourceSystem(): string
     {
         return $this->system;
     }
@@ -61,7 +70,7 @@ class ResourceException extends SystemException
      *
      * @return string
      */
-    public function resource_type()
+    public function resourceType(): string
     {
         return $this->data['type'] ?? '';
     }
@@ -71,7 +80,7 @@ class ResourceException extends SystemException
      *
      * @return string
      */
-    public function resource_operation()
+    public function resourceOperation(): string
     {
         return $this->data['operation'] ?? '';
     }

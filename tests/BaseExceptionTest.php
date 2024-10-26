@@ -10,7 +10,7 @@ class DebugException extends BaseException
 {
     public const DEBUG_DATA        = 'test debug data';
 
-    public function __construct($exception, $code = 0, $previous = null)
+    public function __construct(\IfCastle\Exceptions\BaseExceptionInterface|\Throwable|array|string $exception, int $code = 0, ?\Throwable $previous = null)
     {
         if ($code === 1) {
             $this->isDebug = true;
@@ -50,6 +50,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->test_data    =
@@ -73,9 +74,10 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
      */
+    #[\Override]
     protected function tearDown(): void {}
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $previous = new \Exception('ex', 2);
 
@@ -96,7 +98,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(($this->test_base_data['previous'] === $e->getPrevious()), '$e->getPrevious() failed');
     }
 
-    public function testConstructAsContainer()
+    public function testConstructAsContainer(): void
     {
         // 1. Случай контейнер для исключения \Exception
         $exception = new \UnderflowException(
@@ -133,7 +135,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(($exception === $e->getPreviousException()), '$e->get_previous() failed');
     }
 
-    public function testSetLoggable()
+    public function testSetLoggable(): void
     {
         $this->BaseException->setLoggable(true);
         $this->assertTrue($this->BaseException->isLoggable(), 'Loggable flag must be TRUE');
@@ -145,7 +147,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->BaseException->isLoggable(), 'Loggable flag must be TRUE');
     }
 
-    public function testGetLevel()
+    public function testGetLevel(): void
     {
         $this->assertEquals(
             $this->test_data['level'],
@@ -154,14 +156,14 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetSource()
+    public function testGetSource(): void
     {
-        $this->assertEquals(__CLASS__ . '->setUp', \implode('', $this->BaseException->getSource()));
+        $this->assertEquals(self::class . '->setUp', \implode('', $this->BaseException->getSource()));
         // called twice for check second call
-        $this->assertEquals(__CLASS__ . '->setUp', \implode('', $this->BaseException->getSource()));
+        $this->assertEquals(self::class . '->setUp', \implode('', $this->BaseException->getSource()));
     }
 
-    public function testGetData()
+    public function testGetData(): void
     {
         $data = $this->BaseException->getExceptionData();
 
@@ -173,10 +175,10 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
             unset($data[$key]);
         }
 
-        $this->assertTrue(\count($data) === 0, 'Data has contain unknown elements');
+        $this->assertTrue($data === [], 'Data has contain unknown elements');
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $data           = $this->BaseException->toArray();
 
@@ -206,16 +208,17 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
             } else {
                 $this->assertEquals($main_value, $data[$main_key]);
             }
+
             unset($data[$main_key]);
         }
 
-        $this->assertTrue(\count($data) === 0, 'Data has contain unknown elements');
+        $this->assertTrue($data === [], 'Data has contain unknown elements');
     }
 
     /**
      * Тест to_array для исключения-контейнера.
      */
-    public function testToArrayForContainer()
+    public function testToArrayForContainer(): void
     {
         $exception      = new \IfCastle\Exceptions\LoggableException(new \Exception('test', 2));
 
@@ -240,13 +243,13 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
             unset($data[$main_key]);
         }
 
-        $this->assertTrue(\count($data) === 0, 'Data has contain unknown elements');
+        $this->assertTrue($data === [], 'Data has contain unknown elements');
     }
 
     /**
      * Тест to_array для исключения-контейнера.
      */
-    public function testToArrayForContainer2()
+    public function testToArrayForContainer2(): void
     {
         $exception      = new \IfCastle\Exceptions\LoggableException(new \IfCastle\Exceptions\BaseException(['message' => 'test', 'exdata' => 'data']));
 
@@ -273,10 +276,10 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
             unset($data[$main_key]);
         }
 
-        $this->assertTrue(\count($data) === 0, 'Data has contain unknown elements');
+        $this->assertTrue($data === [], 'Data has contain unknown elements');
     }
 
-    public function testToArrayForTemplate()
+    public function testToArrayForTemplate(): void
     {
         $test           = new \ArrayObject([1, 2, 3]);
 
@@ -295,14 +298,14 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertIsArray($data, 'data must be array');
 
-        foreach ($mockup as $main_key => $main_value) {
+        foreach (array_keys($mockup) as $main_key) {
             $this->assertArrayHasKey($main_key, $data);
 
             $this->assertEquals($mockup[$main_key], $data[$main_key], "$main_key is failed");
         }
     }
 
-    public function testLoggableContainer()
+    public function testLoggableContainer(): void
     {
         \IfCastle\Exceptions\Registry::resetExceptionLog();
 
@@ -319,7 +322,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($not_loggable_exception === $exceptions[0], '$not_loggable_exception is failed');
     }
 
-    public function testGetPrevious()
+    public function testGetPrevious(): void
     {
         // 1.
         $exception                  = new \IfCastle\Exceptions\BaseException('message');
@@ -343,7 +346,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($previous === $exception->getPreviousException(), '$previous failed for new Error');
     }
 
-    public function testDebugData()
+    public function testDebugData(): void
     {
         $exception                  = new \IfCastle\Exceptions\DebugException('message');
 
@@ -360,7 +363,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['test' => \IfCastle\Exceptions\DebugException::DEBUG_DATA], $exception->getDebugData());
     }
 
-    public function testAppendData()
+    public function testAppendData(): void
     {
         $exception                  = new \IfCastle\Exceptions\BaseException(['data' => 'test']);
 

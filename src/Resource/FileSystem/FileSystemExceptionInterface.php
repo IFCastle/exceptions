@@ -6,5 +6,5 @@ namespace IfCastle\Exceptions\Resource\FileSystem;
 
 interface FileSystemExceptionInterface
 {
-    public const SYSTEM        = 'FileSystem';
+    public const string SYSTEM = 'FileSystem';
 }

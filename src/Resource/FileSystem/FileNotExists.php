@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IfCastle\Exceptions\Resource\FileSystem;
 
-use Exceptions\Resource\ResourceNotExists;
+use IfCastle\Exceptions\Resource\ResourceNotExists;
 
 class FileNotExists extends ResourceNotExists implements FileSystemExceptionInterface
 {

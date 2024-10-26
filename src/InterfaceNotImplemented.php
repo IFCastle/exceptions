@@ -7,7 +7,7 @@ namespace IfCastle\Exceptions;
 /**
  * If class not implemented required interface.
  */
-class InterfaceNotImplemented extends LoggableException
+class InterfaceNotImplemented       extends LoggableException
 {
     protected string $template      = 'Class {class} does not implement interface {interface}';
 
@@ -17,7 +17,7 @@ class InterfaceNotImplemented extends LoggableException
      * @param       string|array|object     $class         Class name
      * @param       string                  $interface     Required interface
      */
-    public function __construct($class, $interface)
+    public function __construct(object|array|string $class, string $interface)
     {
         if (\is_array($class)) {
             parent::__construct($class);

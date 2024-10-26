@@ -18,7 +18,7 @@ class UnSerializeException extends LoggableException
      * @param       string              $type           Type of serialize
      * @param       mixed               $node           The node which must have been serialized
      */
-    public function __construct($reason, $type = 'phpserialize', $node = null)
+    public function __construct(array|string $reason, string $type = 'phpserialize', string|null $node = null)
     {
         if (!\is_string($reason)) {
             parent::__construct($reason);

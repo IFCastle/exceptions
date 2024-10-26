@@ -1,0 +1,11 @@
+parameters:
+	level: 6
+	paths:
+		- src
+	tips:
+		treatPhpDocTypesAsCertain: false
+	ignoreErrors:
+		#- identifier: instanceof.alwaysTrue
+		#- identifier: instanceof.alwaysFalse
+		- identifier: identical.alwaysFalse
+		# - '#Strict comparison using === between true and false will always evaluate to false#'

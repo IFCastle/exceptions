@@ -14,7 +14,7 @@ final readonly class PsrLogAdapter implements LoggerInterface
     
     public function log(mixed $level, \Stringable|string $message, array $context = []): void
     {
-        if(false === $message instanceof BaseExceptionInterface) {
+        if(false === $message instanceof BaseExceptionInterface || empty($context['exception'])) {
             $this->logger->log($level, $message, $context);
             return;
         }

@@ -6,64 +6,49 @@ namespace IfCastle\Exceptions;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class TestedTemplateHandler {
-    
+class TestedTemplateHandler
+{
     use TemplateHandlerTrait {
         handleTemplate as public _handleTemplate;
     }
-    
+
     /**
      * @param string $value
-     * @param bool   $isQuoted
-     * @param int    $arrayMax
      *
-     * @return      string
      */
     protected function toString(mixed $value, bool $isQuoted = false, int $arrayMax = 5): string
     {
-        if($isQuoted)
-        {
-            return '\''.$value.'\'';
+        if ($isQuoted) {
+            return '\'' . $value . '\'';
         }
-        else
-        {
-            return (string)$value;
-        }
+
+
+        return (string) $value;
+
     }
 }
 
-class TemplateHandlerTraitTest          extends \PHPUnit\Framework\TestCase
+class TemplateHandlerTraitTest extends \PHPUnit\Framework\TestCase
 {
-    
     /**
      * @param string       $template
-     * @param   array      $data
      * @param string|array $message
-     * @param int|string   $code
-     * @param ?\Throwable  $previous
-     * @param mixed        $expected
      */
     #[DataProvider('dataProvider')]
-    public function test(mixed $template, array $data, string|array|\ArrayObject $message, int|string $code, \Throwable $previous = null, mixed $expected = null)
+    public function test(mixed $template, array $data, string|array|\ArrayObject $message, int|string $code, ?\Throwable $previous = null, mixed $expected = null)
     {
         $testedObject           = new \IfCastle\Exceptions\TestedTemplateHandler();
-        
-        if($expected instanceof \Throwable)
-        {
+
+        if ($expected instanceof \Throwable) {
             $e              = null;
-            
-            try
-            {
+
+            try {
                 $testedObject->_handleTemplate($template, $data, $message, $code, $previous);
+            } catch (\Throwable $e) {
             }
-            catch(\Throwable $e)
-            {
-            }
-            
-            $this->assertInstanceOf(get_class($expected), $e);
-        }
-        else
-        {
+
+            $this->assertInstanceOf(\get_class($expected), $e);
+        } else {
             $result        = $testedObject->_handleTemplate($template, $data, $message, $code, $previous);
             $this->assertEquals($expected, $result);
         }
@@ -82,7 +67,7 @@ class TemplateHandlerTraitTest          extends \PHPUnit\Framework\TestCase
             'code'          => 5,
             'previous'      => new \Exception('this new exception'),
             'expected'      => 'This test template message with 5 and this new exception.'
-                              .' this is test additional message'
+                              . ' this is test additional message',
         ];
     }
 
@@ -99,7 +84,7 @@ class TemplateHandlerTraitTest          extends \PHPUnit\Framework\TestCase
             'code'          => 5,
             'previous'      => null,
             'expected'      => 'This test template message with 5 and this new exception.'
-                              .' this is test additional message'
+                              . ' this is test additional message',
         ];
     }
 
@@ -116,7 +101,7 @@ class TemplateHandlerTraitTest          extends \PHPUnit\Framework\TestCase
             'code'          => 5,
             'previous'      => new \Exception('this new exception'),
             'expected'      => 'This test template message with 5 and this new exception.'
-                              .' this is test additional message'
+                              . ' this is test additional message',
         ];
     }
 
@@ -133,7 +118,7 @@ class TemplateHandlerTraitTest          extends \PHPUnit\Framework\TestCase
             'code'          => 5,
             'previous'      => null,
             'expected'      => 'This test template message with 5 and \'test-value\'.'
-                              .' this is test additional message'
+                              . ' this is test additional message',
         ];
     }
 
@@ -149,7 +134,7 @@ class TemplateHandlerTraitTest          extends \PHPUnit\Framework\TestCase
             'message'       => new \ArrayObject([]),
             'code'          => 5,
             'previous'      => null,
-            'expected'      => new \TypeError()
+            'expected'      => new \TypeError(),
         ];
     }
 
@@ -165,7 +150,7 @@ class TemplateHandlerTraitTest          extends \PHPUnit\Framework\TestCase
             'message'       => '',
             'code'          => '5',
             'previous'      => null,
-            'expected'      => new \TypeError()
+            'expected'      => new \TypeError(),
         ];
     }
 
@@ -181,7 +166,7 @@ class TemplateHandlerTraitTest          extends \PHPUnit\Framework\TestCase
             'message'       => '',
             'code'          => 10,
             'previous'      => null,
-            'expected'      => new \TypeError()
+            'expected'      => new \TypeError(),
         ];
     }
 
@@ -191,11 +176,9 @@ class TemplateHandlerTraitTest          extends \PHPUnit\Framework\TestCase
 
         $results                = [];
 
-        foreach($reflection->getMethods(\ReflectionMethod::IS_PROTECTED) as $method)
-        {
-            if(!str_starts_with($method->getName(), 'data_set_')
-               || preg_match('/@dataSet\sOff/im', $method->getDocComment()))
-            {
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_PROTECTED) as $method) {
+            if (!\str_starts_with($method->getName(), 'data_set_')
+               || \preg_match('/@dataSet\sOff/im', $method->getDocComment())) {
                 continue;
             }
 

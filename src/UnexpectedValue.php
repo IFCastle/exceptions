@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
  * The variable has unexpected value!
  */
-class UnexpectedValue               extends LoggableException
+class UnexpectedValue extends LoggableException
 {
     protected string $template      = 'Unexpected value {value} occurred in the variable {name}';
 
@@ -19,18 +22,16 @@ class UnexpectedValue               extends LoggableException
      */
     public function __construct($name, $value = null, $rules = null)
     {
-        if(!is_scalar($name))
-        {
+        if (!\is_scalar($name)) {
             parent::__construct($name);
             return;
         }
 
-        parent::__construct
-        ([
+        parent::__construct([
             'name'        => $name,
             'value'       => $this->toString($value),
             'message'     => $rules,
-            'type'        => $this->typeInfo($value)
+            'type'        => $this->typeInfo($value),
         ]);
     }
 }

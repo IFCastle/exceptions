@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
  * Object can't be unserialized!
  */
-class UnSerializeException          extends LoggableException
+class UnSerializeException extends LoggableException
 {
     protected string $template      = 'Unserialize process was failed (type: {type}, node: {node})';
 
@@ -17,17 +20,15 @@ class UnSerializeException          extends LoggableException
      */
     public function __construct($reason, $type = 'phpserialize', $node = null)
     {
-        if(!is_string($reason))
-        {
+        if (!\is_string($reason)) {
             parent::__construct($reason);
             return;
         }
 
-        parent::__construct
-        ([
+        parent::__construct([
             'message'       => $reason,
             'type'          => $type,
-            'node'          => $this->typeInfo($node)
+            'node'          => $this->typeInfo($node),
         ]);
     }
 }

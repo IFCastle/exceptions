@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
@@ -9,6 +12,4 @@ namespace IfCastle\Exceptions;
  * or unusable system.
  *
  */
-interface RuntimeExceptionInterface
-{
-}
+interface RuntimeExceptionInterface {}

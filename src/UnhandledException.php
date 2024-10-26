@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
  * Special exception, which is used to mark an unhandled exception.
  * Is used in the `Registry`.
  */
-class UnhandledException            extends LoggableException
+class UnhandledException extends LoggableException
 {
     protected string $template      = 'Unhandled Exception {type} occurred in the {source}';
 
@@ -14,11 +17,10 @@ class UnhandledException            extends LoggableException
      */
     public function __construct(\Throwable $exception)
     {
-        parent::__construct
-        ([
+        parent::__construct([
             'type'      => $this->typeInfo($exception),
             'source'    => $this->getSourceFor($exception),
-            'previous'  => $exception
+            'previous'  => $exception,
         ]);
     }
 }

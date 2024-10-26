@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
  * Value of variable has unexpected type.
  */
-class UnexpectedValueType           extends LoggableException
+class UnexpectedValueType extends LoggableException
 {
     protected string $template      = 'Unexpected type occurred for the value {name} and type {type}. Expected {expected}';
 
@@ -17,20 +20,18 @@ class UnexpectedValueType           extends LoggableException
      * @param       string              $expected       Excepted type
      */
     public function __construct($name,
-                                $value      = null,
-                                $expected   = null)
+        $value      = null,
+        $expected   = null)
     {
-        if(!is_scalar($name))
-        {
+        if (!\is_scalar($name)) {
             parent::__construct($name);
             return;
         }
 
-        parent::__construct
-        ([
+        parent::__construct([
             'name'        => $name,
             'type'        => $this->typeInfo($value),
-            'expected'    => $expected
+            'expected'    => $expected,
         ]);
     }
 }

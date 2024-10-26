@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
@@ -8,19 +11,19 @@ namespace IfCastle\Exceptions;
 interface StorageInterface
 {
     /**
-     * Add exception into storage
+     * Add exception into storage.
      *
      * @param       BaseExceptionInterface|\Exception $exception Exception
      */
     public function addException(BaseExceptionInterface|\Throwable $exception): static;
 
     /**
-     * Returns list of exceptions
+     * Returns list of exceptions.
      */
     public function getStorageExceptions(): array;
 
     /**
-     * Reset storage
+     * Reset storage.
      */
     public function resetStorage(): static;
 }

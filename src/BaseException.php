@@ -37,62 +37,59 @@ namespace IfCastle\Exceptions;
  * Class supports the template of the error message instead of the plain message.
  *
  */
-class BaseException                 extends     \Exception
-                                    implements BaseExceptionInterface
+class BaseException extends \Exception implements BaseExceptionInterface
 {
-    public static function serializeToArray(\Throwable|BaseExceptionInterface $throwable = null): array
+    use HelperTrait;
+    use ArraySerializerTrait;
+    use TemplateHandlerTrait;
+    public static function serializeToArray(\Throwable|BaseExceptionInterface|null $throwable = null): array
     {
-        if($throwable instanceof BaseExceptionInterface) {
+        if ($throwable instanceof BaseExceptionInterface) {
             return $throwable->toArray();
         }
-        
+
         return [
             'message'           => $throwable->getMessage(),
             'code'              => $throwable->getCode(),
             'file'              => $throwable->getFile(),
             'line'              => $throwable->getLine(),
-            'trace'             => $throwable->getTrace()
+            'trace'             => $throwable->getTrace(),
         ];
     }
-    
-    use HelperTrait;
-    use ArraySerializerTrait;
-    use TemplateHandlerTrait;
 
     /**
-     * Layout of the default properties
+     * Layout of the default properties.
      */
-    static protected array $baseProps = ['message' => '', 'code' => 0, 'previous' => null, 'template' => '', 'tags' => []];
+    protected static array $baseProps = ['message' => '', 'code' => 0, 'previous' => null, 'template' => '', 'tags' => []];
 
     /**
-     * template message
+     * template message.
      */
     protected string $template      = '';
 
     /**
-     * Extra data to exception
-     * @var array
+     * Extra data to exception.
      */
     protected array $data           = [];
-    
+
     /**
-     * Tags for logging
+     * Tags for logging.
      * @var string[]
      */
     protected array $tags           = [];
 
     /**
-     * Source of error
+     * Source of error.
      */
     protected ?array $source        = null;
 
     /**
-     * Debug data
+     * Debug data.
      */
     protected array $debugData      = [];
 
     /**
-     * Container flag
+     * Container flag.
      */
     protected bool $isContainer    = false;
 
@@ -103,15 +100,15 @@ class BaseException                 extends     \Exception
     protected bool $isLoggable      = false;
 
     /**
-     * Fatal exception flag
+     * Fatal exception flag.
      */
     protected bool $isFatal         = false;
 
     /**
-     * Debug mode flag
+     * Debug mode flag.
      */
     protected ?bool $isDebug        = null;
-    
+
     /**
      * BaseException constructor.
      *
@@ -134,28 +131,24 @@ class BaseException                 extends     \Exception
      * @param int                                            $code      Code
      * @param \Throwable|null                                $previous  Previous or aggregate exception
      */
-    public function __construct(BaseExceptionInterface|\Throwable|array|string $exception, int $code = 0, \Throwable $previous = null)
+    public function __construct(BaseExceptionInterface|\Throwable|array|string $exception, int $code = 0, ?\Throwable $previous = null)
     {
         $template               = '';
         $message                = '';
         $tags                   = [];
 
-        if($exception instanceof BaseExceptionInterface)
-        {
+        if ($exception instanceof BaseExceptionInterface) {
             $this->isContainer = true;
 
             // If aggregate $exception wasn't journaled,
             // and this is going to be to journal,
             // then an $exception should be registered.
-            if(!$exception->isLoggable() && $this->isLoggable)
-            {
+            if (!$exception->isLoggable() && $this->isLoggable) {
                 Registry::registerException($exception);
             }
 
             $previous           = $exception;
-        }
-        elseif($exception instanceof \Throwable)
-        {
+        } elseif ($exception instanceof \Throwable) {
             $this->isContainer  = true;
 
             // Inherit properties from the aggregated $exception
@@ -166,38 +159,30 @@ class BaseException                 extends     \Exception
             $code               = $exception->getCode();
             $previous           = $exception;
 
-            if($this->isLoggable)
-            {
+            if ($this->isLoggable) {
                 Registry::registerException($exception);
             }
-        }
-        elseif(is_array($exception))
-        {
+        } elseif (\is_array($exception)) {
             // The code separating the parameters on the basic and additional
-            $baseProps          = array_intersect_key($exception, self::$baseProps);
-            $this->data         = array_diff_key($exception, $baseProps);
-            extract($baseProps);
-        }
-        else
-        {
+            $baseProps          = \array_intersect_key($exception, self::$baseProps);
+            $this->data         = \array_diff_key($exception, $baseProps);
+            \extract($baseProps);
+        } else {
             $message            = $exception;
         }
 
         // handle a template message
-        if(!empty($this->template))
-        {
+        if (!empty($this->template)) {
             $template           = $this->template;
         }
 
         $this->tags             += $tags;
-        
-        if(!empty($template))
-        {
+
+        if (!empty($template)) {
             $this->template     = $template;
 
             // override message key if not exists
-            if(!empty($message))
-            {
+            if (!empty($message)) {
                 $this->data['message'] = $message;
             }
 
@@ -205,46 +190,41 @@ class BaseException                 extends     \Exception
         }
 
         // parent construct
-        if($previous instanceof BaseExceptionInterface
-        && ($previous instanceof \Throwable) === false)
-        {
+        if ($previous instanceof BaseExceptionInterface
+        && ($previous instanceof \Throwable) === false) {
             parent::__construct($message, $code);
 
             $this->data['previous'] = $previous;
-        }
-        else
-        {
+        } else {
             parent::__construct($message, $code, $previous);
         }
 
         // The container is never in the journal
-        if($this->isLoggable && $this->isContainer === false)
-        {
+        if ($this->isLoggable && $this->isContainer === false) {
             Registry::registerException($this);
         }
 
         // The handler for fatal exceptions
-        if($this->isFatal)
-        {
+        if ($this->isFatal) {
             Registry::callFatalHandler($this);
         }
     }
 
     /**
-     * Returns template message
+     * Returns template message.
      */
     #[\Override]
     public function template(): string
     {
         return $this->template;
     }
-    
+
     #[\Override]
     public function getTags(): array
     {
         return $this->tags;
     }
-    
+
     /**
      * The method returns a logging flag.
      *
@@ -255,7 +235,7 @@ class BaseException                 extends     \Exception
     {
         return $this->isLoggable;
     }
-    
+
     /**
      * The method sets a logging flag.
      *
@@ -291,8 +271,7 @@ class BaseException                 extends     \Exception
     #[\Override]
     public function markAsFatal(): static
     {
-        if(!$this->isFatal)
-        {
+        if (!$this->isFatal) {
             $this->isFatal     = true;
             Registry::callFatalHandler($this);
             return $this;
@@ -313,7 +292,7 @@ class BaseException                 extends     \Exception
     }
 
     /**
-     * The method returns an error level
+     * The method returns an error level.
      */
     #[\Override]
     public function getLevel(): int
@@ -334,8 +313,7 @@ class BaseException                 extends     \Exception
     #[\Override]
     public function getSource(): ?array
     {
-        if(is_array($this->source))
-        {
+        if (\is_array($this->source)) {
             return $this->source;
         }
 
@@ -369,7 +347,7 @@ class BaseException                 extends     \Exception
     }
 
     /**
-     * The method returns extra data for exception
+     * The method returns extra data for exception.
      */
     #[\Override]
     public function getExceptionData(): array
@@ -386,7 +364,7 @@ class BaseException                 extends     \Exception
     }
 
     /**
-     * The method returns debug data for exception
+     * The method returns debug data for exception.
      */
     #[\Override]
     public function getDebugData(): array
@@ -401,28 +379,23 @@ class BaseException                 extends     \Exception
     public function toArray(): array
     {
         // If this exception is container, then it returns data of container.
-        if($this->isContainer())
-        {
+        if ($this->isContainer()) {
             $previous       = $this->getPreviousException();
 
-            if($previous instanceof BaseExceptionInterface)
-            {
+            if ($previous instanceof BaseExceptionInterface) {
                 $res        = $previous->toArray();
-            }
-            else
-            {
+            } else {
                 $res =
                 [
                     'type'      => $previous::class,
                     'source'    => $this->getSourceFor($previous),
                     'message'   => $previous->getMessage(),
                     'code'      => $previous->getCode(),
-                    'data'      => []
+                    'data'      => [],
                 ];
             }
 
-            if(empty($res['container']))
-            {
+            if (empty($res['container'])) {
                 $res['container'] = static::class;
             }
 
@@ -430,13 +403,10 @@ class BaseException                 extends     \Exception
         }
 
         // override the exception message if the template was defined
-        if($this->template() !== '')
-        {
+        if ($this->template() !== '') {
 
             $message    = $this->getExceptionData()['message'] ?? '';
-        }
-        else
-        {
+        } else {
             $message    = $this->getMessage();
         }
 
@@ -448,12 +418,12 @@ class BaseException                 extends     \Exception
             'template'  => $this->template(),
             'tags'      => $this->getTags(),
             'code'      => $this->getCode(),
-            'data'      => $this->getExceptionData()
+            'data'      => $this->getExceptionData(),
         ];
     }
 
     /**
-     * Returns information about a value type
+     * Returns information about a value type.
      *
      * @param   mixed           $value      Value
      */
@@ -467,8 +437,7 @@ class BaseException                 extends     \Exception
      */
     protected function isDebug(): bool
     {
-        if(is_bool($this->isDebug))
-        {
+        if (\is_bool($this->isDebug)) {
             return $this->isDebug;
         }
 
@@ -483,8 +452,7 @@ class BaseException                 extends     \Exception
      */
     protected function setDebugData(array $data): static
     {
-        if(!$this->isDebug())
-        {
+        if (!$this->isDebug()) {
             return $this;
         }
 

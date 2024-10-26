@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
- * Fatal exception with aspect: "System"
+ * Fatal exception with aspect: "System".
  */
-class FatalSystemException extends FatalException implements SystemExceptionInterface
-{
-}
+class FatalSystemException extends FatalException implements SystemExceptionInterface {}

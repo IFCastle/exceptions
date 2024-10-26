@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace IfCastle\Exceptions\Errors;
 
@@ -17,8 +19,7 @@ class UserError extends Error implements RuntimeExceptionInterface
     {
         parent::__construct($code, $message, $file, $line);
 
-        if($this->code !== E_USER_ERROR)
-        {
+        if ($this->code !== E_USER_ERROR) {
             $this->isLoggable = false;
         }
     }

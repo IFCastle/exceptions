@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 interface SaveHandlerInterface
 {
     /**
-     * Save handler method
+     * Save handler method.
      *
      *
      */
-    public function saveExceptions(array $exceptions , callable $resetLog, array $loggerOptions = [], array $debugOptions = []): void;
+    public function saveExceptions(array $exceptions, callable $resetLog, array $loggerOptions = [], array $debugOptions = []): void;
 }

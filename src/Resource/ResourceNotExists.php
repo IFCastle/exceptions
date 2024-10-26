@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions\Resource;
 
 class ResourceNotExists extends ResourceException
@@ -7,12 +10,11 @@ class ResourceNotExists extends ResourceException
 
     public function __construct($resource, $type = 'resource')
     {
-        parent::__construct
-        ([
+        parent::__construct([
             'resource'  => $resource,
-            'operation' => 'is_'.$type,
+            'operation' => 'is_' . $type,
             'type'      => $type,
-            'system'    => $this->system
+            'system'    => $this->system,
         ]);
     }
 }

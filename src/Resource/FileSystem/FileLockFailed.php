@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions\Resource\FileSystem;
 
 use Exceptions\Resource\ResourceLockFailed;
 
-class FileLockFailed    extends    ResourceLockFailed
-                        implements FileSystemExceptionInterface
+class FileLockFailed extends ResourceLockFailed implements FileSystemExceptionInterface
 {
     protected string $system   = self::SYSTEM;
 

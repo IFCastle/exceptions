@@ -1,13 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
  * Contract is not correctly
  * (When an object does not support the required conditions of Trait,
  * Traits
- * throws that exception)
+ * throws that exception).
  */
-class ContractNotCorrectly      extends LoggableException
+class ContractNotCorrectly extends LoggableException
 {
     public const PROP                  = 'property';
     public const INT                   = 'interface';
@@ -16,7 +19,7 @@ class ContractNotCorrectly      extends LoggableException
     protected string $template  = 'Contract is not correctly for {type} in the trait {trait} which used by {object}';
 
     /**
-     * Contract is not correctly
+     * Contract is not correctly.
      *
      * @param       object      $object     object used trait
      * @param       string      $type       type of contract
@@ -26,13 +29,12 @@ class ContractNotCorrectly      extends LoggableException
      */
     public function __construct($object, $type = self::PROP, $value = null, $trait = null, $notice = '')
     {
-        parent::__construct
-        ([
+        parent::__construct([
             'message'       => $notice,
             'object'        => $this->typeInfo($object),
             'type'          => $type,
             'value'         => $this->toString($value),
-            'trait'         => $trait
+            'trait'         => $trait,
         ]);
     }
 }

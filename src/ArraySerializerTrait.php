@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace IfCastle\Exceptions;
 
@@ -12,35 +14,30 @@ trait ArraySerializerTrait
     abstract protected function getSourceFor(\Throwable $e, bool $isString = false): array|string;
 
     /**
-     * The method serialized errors BaseExceptionI to an array
+     * The method serialized errors BaseExceptionI to an array.
      *
      * @param 			array|BaseExceptionInterface $errors array of errors
      */
     protected function errorsToArray(mixed $errors): array
     {
-        if($errors instanceof BaseExceptionInterface)
-        {
+        if ($errors instanceof BaseExceptionInterface) {
             $errors             = [$errors];
         }
 
         $results                = [];
 
-        foreach($errors as $error)
-        {
-            if($error instanceof BaseExceptionInterface)
-            {
+        foreach ($errors as $error) {
+            if ($error instanceof BaseExceptionInterface) {
                 /* @var BaseExceptionInterface $error */
                 $results[]      = $error->toArray();
-            }
-            elseif($error instanceof \Throwable)
-            {
+            } elseif ($error instanceof \Throwable) {
                 /* @var \Exception $error */
                 $results[]      =
                 [
                     'type'      => $error::class,
                     'source'    => $this->getSourceFor($error),
                     'message'   => $error->getMessage(),
-                    'code'      => $error->getCode()
+                    'code'      => $error->getCode(),
                 ];
             }
         }
@@ -62,10 +59,8 @@ trait ArraySerializerTrait
     {
         $results                = [];
 
-        foreach($array as $error)
-        {
-            if(!is_array($error))
-            {
+        foreach ($array as $error) {
+            if (!\is_array($error)) {
                 throw new \UnexpectedValueException('$error must be array');
             }
 

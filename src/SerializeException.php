@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
  * Object can't be serialized!
  */
-class SerializeException            extends LoggableException
+class SerializeException extends LoggableException
 {
     protected string $template      = 'Serialize process was failed (type:{type}, object:{object}, src:{src_object}). {reason}';
 
@@ -18,19 +21,17 @@ class SerializeException            extends LoggableException
      */
     public function __construct($reason, $object = null, $type = 'phpserialize', $src_object = null)
     {
-        if(!is_string($reason))
-        {
+        if (!\is_string($reason)) {
             parent::__construct($reason);
             return;
         }
 
-        parent::__construct
-        ([
+        parent::__construct([
             'message'       => 'Serialize Failed',
             'reason'        => $reason,
             'type'          => $type,
             'object'        => $this->typeInfo($object),
-            'src_object'    => $this->typeInfo($src_object)
+            'src_object'    => $this->typeInfo($src_object),
         ]);
     }
 }

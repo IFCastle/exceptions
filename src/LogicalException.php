@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
- * Violation of logic
+ * Violation of logic.
  */
-class LogicalException      extends LoggableException
-{
-}
+class LogicalException extends LoggableException {}

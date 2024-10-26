@@ -1,10 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions\Errors;
 
 /**
- * Class for warnings
+ * Class for warnings.
  *
  */
-class Warning extends Error
-{
-}
+class Warning extends Error {}

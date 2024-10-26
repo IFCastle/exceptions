@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions\Resource;
 
 class ResourceDataWrong extends ResourceException
@@ -7,12 +10,11 @@ class ResourceDataWrong extends ResourceException
 
     public function __construct($resource, $type = 'resource', $format = 'format')
     {
-        parent::__construct
-        ([
+        parent::__construct([
             'resource'  => $resource,
-            'operation' => 'format:'.$format,
+            'operation' => 'format:' . $format,
             'format'    => $format,
-            'system'    => $this->system
+            'system'    => $this->system,
         ]);
     }
 }

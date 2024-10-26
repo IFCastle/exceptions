@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace IfCastle\Exceptions;
 
 /**
  * The method does not support this mode of work.
  */
-class UnexpectedMethodMode          extends LoggableException
+class UnexpectedMethodMode extends LoggableException
 {
     protected string $template      = 'Unexpected method mode occurred (method: {method}, mode: {mode} = {value})';
 
@@ -19,20 +21,16 @@ class UnexpectedMethodMode          extends LoggableException
      * @param       string|int      $value          Mode value
      */
     public function __construct($method,
-                                $mode   = null,
-                                $value  = null)
+        $mode   = null,
+        $value  = null)
     {
-        if(!is_scalar($method))
-        {
+        if (!\is_scalar($method)) {
             parent::__construct($method);
-        }
-        else
-        {
-            parent::__construct
-            ([
+        } else {
+            parent::__construct([
                 'method'  => $method,
                 'mode'    => $mode,
-                'value'   => $value
+                'value'   => $value,
             ]);
         }
     }

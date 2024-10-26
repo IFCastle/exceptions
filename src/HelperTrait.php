@@ -15,10 +15,9 @@ trait HelperTrait
     {
         $res                    = $e->getTrace()[0];
 
-        if($isString)
-        {
-            return  ($res['class'] ?? $res['file'] . ':' . $res['line']).
-                    ($res['type'] ?? '.').
+        if ($isString) {
+            return  ($res['class'] ?? $res['file'] . ':' . $res['line']) .
+                    ($res['type'] ?? '.') .
                     ($res['function'] ?? '{}');
         }
 
@@ -39,47 +38,45 @@ trait HelperTrait
      */
     final protected function getValueType(mixed $value): string
     {
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value ? 'TRUE' : 'FALSE';
         }
-        if (is_object($value)) {
-            return get_debug_type($value);
+        if (\is_object($value)) {
+            return \get_debug_type($value);
         }
-        if (is_null($value)) {
+        if (\is_null($value)) {
             return 'NULL';
         }
-        if (is_string($value)) {
+        if (\is_string($value)) {
             return 'STRING';
         }
-        if (is_int($value)) {
+        if (\is_int($value)) {
             return 'INTEGER';
         }
-        if (is_float($value)) {
+        if (\is_float($value)) {
             // is_double some
             return 'DOUBLE';
         }
-        if (is_array($value)) {
-            return 'ARRAY('.count($value).')';
+        if (\is_array($value)) {
+            return 'ARRAY(' . \count($value) . ')';
         }
-        if (is_resource($value)) {
-            $type           = get_resource_type($value);
+        if (\is_resource($value)) {
+            $type           = \get_resource_type($value);
             $meta           = '';
-            if($type === 'stream' && is_array($meta = stream_get_meta_data($value)))
-            {
+            if ($type === 'stream' && \is_array($meta = \stream_get_meta_data($value))) {
                 // array keys normalize
-                $meta       = array_merge
-                (
+                $meta       = \array_merge(
                     ['stream_type' => '', 'wrapper_type' => '', 'mode' => '', 'uri' => ''],
                     $meta
                 );
                 $meta       = " ({$meta['stream_type']}, {$meta['wrapper_type']}, {$meta['mode']}) {$meta['uri']}";
             }
-            return 'RESOURCE: '.$type.$meta;
+            return 'RESOURCE: ' . $type . $meta;
         }
-        else
-        {
-            return get_debug_type($value);
-        }
+
+
+        return \get_debug_type($value);
+
     }
 
     /**
@@ -92,60 +89,41 @@ trait HelperTrait
     protected function toString(mixed $value, bool $isQuoted = false, int $arrayMax = 5): string
     {
         // truncate data
-        if(is_string($value) && strlen($value) > 255)
-        {
-            $value          = substr($value, 0, 255).'…';
-        }
-        elseif(is_bool($value))
-        {
+        if (\is_string($value) && \strlen($value) > 255) {
+            $value          = \substr($value, 0, 255) . '…';
+        } elseif (\is_bool($value)) {
             $value          = $value ? 'TRUE' : 'FALSE';
             $isQuoted       = false;
-        }
-        elseif(is_null($value))
-        {
+        } elseif (\is_null($value)) {
             $value          = 'NULL';
             $isQuoted       = false;
-        }
-        elseif(is_scalar($value))
-        {
-            $value          = (string)$value;
-        }
-        elseif(is_array($value))
-        {
+        } elseif (\is_scalar($value)) {
+            $value          = (string) $value;
+        } elseif (\is_array($value)) {
             $result         = [];
 
-            foreach(array_slice($value, 0, $arrayMax, true) as $key => $item)
-            {
-                if(is_scalar($item))
-                {
-                    $result[] = $this->toString($key, false).':'.$this->toString($item, $isQuoted);
-                }
-                else
-                {
-                    $result[] = $this->toString($key, false).':'.$this->getValueType($item);
+            foreach (\array_slice($value, 0, $arrayMax, true) as $key => $item) {
+                if (\is_scalar($item)) {
+                    $result[] = $this->toString($key, false) . ':' . $this->toString($item, $isQuoted);
+                } else {
+                    $result[] = $this->toString($key, false) . ':' . $this->getValueType($item);
                 }
             }
 
-            if(count($value) > $arrayMax)
-            {
-                $value      = count($value).'['.implode(', ', $result).']';
-            }
-            else
-            {
-                $value      = '['.implode(', ', $result).']';
+            if (\count($value) > $arrayMax) {
+                $value      = \count($value) . '[' . \implode(', ', $result) . ']';
+            } else {
+                $value      = '[' . \implode(', ', $result) . ']';
             }
 
             $isQuoted      = false;
-        }
-        else
-        {
+        } else {
             $value          = $this->getValueType($value);
             $isQuoted       = false;
         }
 
-        if($isQuoted)
-        {
-            return '\''.$value.'\'';
+        if ($isQuoted) {
+            return '\'' . $value . '\'';
         }
 
         return $value;

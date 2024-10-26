@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
@@ -10,6 +13,4 @@ namespace IfCastle\Exceptions;
  * 2. Equipment failures.
  * 3. This type of exception is not the result of errors programmer.
  */
-interface SystemExceptionInterface
-{
-}
+interface SystemExceptionInterface {}

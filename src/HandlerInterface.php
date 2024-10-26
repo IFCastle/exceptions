@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace IfCastle\Exceptions;
 
 interface HandlerInterface
 {
     /**
-     * Exception handler
+     * Exception handler.
      *
      *
      */

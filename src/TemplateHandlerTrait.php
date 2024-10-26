@@ -1,18 +1,20 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace IfCastle\Exceptions;
 
 trait TemplateHandlerTrait
 {
     /**
-     * Returns string view for the $value
+     * Returns string view for the $value.
      *
      *
      */
     abstract protected function toString(mixed $value, bool $isQuoted = false, int $arrayMax = 5): string;
 
     /**
-     * Handles the template message
+     * Handles the template message.
      *
      * @param   string              $template       Template
      * @param   array               $data           Extended data
@@ -22,27 +24,22 @@ trait TemplateHandlerTrait
      *
      * @throws  \UnexpectedValueException
      */
-    protected function handleTemplate
-    (
+    protected function handleTemplate(
         string      $template,
         array       $data,
         string      $message,
         int         $code,
-        \Throwable  $previous   = null
-    ): string
-    {
+        ?\Throwable  $previous   = null
+    ): string {
         // for PSR-3 previous also interpreted as the exception
-        if(isset($data['previous']) && $previous === null)
-        {
+        if (isset($data['previous']) && $previous === null) {
             $previous           = $data['previous'];
             unset($data['previous']);
-        }
-        elseif(isset($data['previous']) && $previous !== null)
-        {
+        } elseif (isset($data['previous']) && $previous !== null) {
             unset($data['previous']);
         }
 
-        $previous               = is_null($previous) ? '' : $previous->getMessage();
+        $previous               = \is_null($previous) ? '' : $previous->getMessage();
 
         // Mixed to context message code and previous
         $context                =
@@ -50,27 +47,24 @@ trait TemplateHandlerTrait
             '{code}'            => $code,
             '{previous}'        => $previous,
             // for PSR-3 previous also interpreted as the exception
-            '{exception}'       => $previous
+            '{exception}'       => $previous,
         ];
 
         // normalize additional message
-        if(empty($message) && isset($data['message']))
-        {
+        if (empty($message) && isset($data['message'])) {
             $message            = $data['message'];
             unset($data['message']);
         }
 
-        foreach($data as $key => $value)
-        {
-            $context['{'.$key.'}'] = $this->toString($value, true);
+        foreach ($data as $key => $value) {
+            $context['{' . $key . '}'] = $this->toString($value, true);
         }
 
-        $template               = strtr($template, $context);
+        $template               = \strtr($template, $context);
 
         // Message added to the result like extended message
-        if(!empty($message))
-        {
-            $template           .= '. '.$message;
+        if (!empty($message)) {
+            $template           .= '. ' . $message;
         }
 
         return $template;

@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions\Resource;
 
 use Exceptions\SystemException;
@@ -22,27 +25,22 @@ class ResourceException extends SystemException
      */
     public function __construct($resource, $type = '', $operation = '')
     {
-        if(!is_scalar($resource))
-        {
+        if (!\is_scalar($resource)) {
             parent::__construct($resource);
-        }
-        else
-        {
-            parent::__construct
-            ([
-                'message'   => $this->resource_system().' error: operation "'.$operation.'" failed',
+        } else {
+            parent::__construct([
+                'message'   => $this->resource_system() . ' error: operation "' . $operation . '" failed',
                 'resource'  => $resource,
                 'operation' => $operation,
                 'type'      => $type,
-                'system'    => $this->resource_system()
+                'system'    => $this->resource_system(),
             ]);
         }
     }
 
     /**
-     * Method return Resource
+     * Method return Resource.
      *
-     * @return mixed
      */
     public function resource()
     {
@@ -50,7 +48,7 @@ class ResourceException extends SystemException
     }
 
     /**
-     * Method return system of Resource
+     * Method return system of Resource.
      * @return string
      */
     public function resource_system()
@@ -59,7 +57,7 @@ class ResourceException extends SystemException
     }
 
     /**
-     * Method return type of Resource
+     * Method return type of Resource.
      *
      * @return string
      */
@@ -69,7 +67,7 @@ class ResourceException extends SystemException
     }
 
     /**
-     * Method return operation
+     * Method return operation.
      *
      * @return string
      */

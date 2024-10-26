@@ -14,7 +14,6 @@ class Storage implements StorageInterface
     /**
      *
      *
-     * @param       BaseExceptionInterface|\Throwable $exception
      *
      * @return      StorageInterface
      */
@@ -32,7 +31,7 @@ class Storage implements StorageInterface
 
     public function resetStorage(): static
     {
-        $this->Exceptions = array();
+        $this->Exceptions = [];
 
         return $this;
     }

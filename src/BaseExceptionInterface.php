@@ -1,58 +1,60 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace IfCastle\Exceptions;
 
 /**
- * Main interface for BaseExceptionI
+ * Main interface for BaseExceptionI.
  */
 interface BaseExceptionInterface
 {
     /**
-     * The System is unusable
+     * The System is unusable.
      */
     final public const EMERGENCY    = 1;
 
     /**
-     * Immediate action required
+     * Immediate action required.
      */
     final public const ALERT         = 2;
 
     /**
-     * Critical conditions
+     * Critical conditions.
      */
     final public const CRITICAL      = 3;
 
     /**
-     * Error conditions
+     * Error conditions.
      */
     final public const ERROR         = 4;
 
     /**
-     * Warning conditions
+     * Warning conditions.
      */
     final public const WARNING       = 5;
 
     /**
-     * Normal but significant
+     * Normal but significant.
      */
     final public const NOTICE        = 6;
 
     /**
-     * Informational
+     * Informational.
      */
     final public const INFO          = 7;
 
     /**
-     * 	Debug-level messages
+     * 	Debug-level messages.
      */
     final public const DEBUG         = 8;
 
     /**
-     * Mode for raise of exception
+     * Mode for raise of exception.
      */
     final public const RISE          = false;
     /**
-     * Mode for mute of exception
+     * Mode for mute of exception.
      */
     final public const MUTE          = true;
     /**
@@ -69,15 +71,15 @@ interface BaseExceptionInterface
     public function getTraceAsString();
 
     /**
-     * Template message
+     * Template message.
      */
     public function template(): string;
-    
+
     /**
      * @return string[]
      */
     public function getTags(): array;
-    
+
     /**
      * The method sets a logging flag.
      *
@@ -117,7 +119,7 @@ interface BaseExceptionInterface
     public function isContainer(): bool;
 
     /**
-     * The method returns an error level
+     * The method returns an error level.
      */
     public function getLevel(): int;
 
@@ -148,7 +150,7 @@ interface BaseExceptionInterface
     public function getPreviousException(): \Throwable|BaseExceptionInterface|null;
 
     /**
-     * The method returns extra data for exception
+     * The method returns extra data for exception.
      */
     public function getExceptionData(): array;
 
@@ -158,7 +160,7 @@ interface BaseExceptionInterface
     public function appendData(array $data): static;
 
     /**
-     * The method returns debug data for exception
+     * The method returns debug data for exception.
      */
     public function getDebugData(): array;
 

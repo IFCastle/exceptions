@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
@@ -9,22 +12,18 @@ namespace IfCastle\Exceptions;
  * It is marked $exception as "fatal" and logged its
  *
  */
-class FatalException                extends LoggableException
+class FatalException extends LoggableException
 {
     /**
-     * FatalException
+     * FatalException.
      *
      * @param       \Throwable|mixed    $exception
-     * @param       ?\Throwable         $previous
      */
-    public function __construct(mixed $exception, int $code = 0, \Throwable $previous = null)
+    public function __construct(mixed $exception, int $code = 0, ?\Throwable $previous = null)
     {
-        if($exception instanceof BaseExceptionInterface)
-        {
+        if ($exception instanceof BaseExceptionInterface) {
             parent::__construct($exception->markAsFatal());
-        }
-        else
-        {
+        } else {
             $this->isFatal = true;
             parent::__construct($exception, $code, $previous);
         }

@@ -1,16 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
  * If object not initialized
  * but using!
  */
-class ObjectNotInitialized          extends LoggableException
+class ObjectNotInitialized extends LoggableException
 {
     protected string $template      = 'Object {object} is not initialized';
 
     /**
-     * If object not initialized
+     * If object not initialized.
      *
      * @param   object      $object     Object
      * @param   string      $message    Addition message

@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace IfCastle\Exceptions;
 
 /**
- * Base class for exception with aspect: Runtime
+ * Base class for exception with aspect: Runtime.
  */
-class RuntimeException extends BaseException implements RuntimeExceptionInterface
-{
-}
+class RuntimeException extends BaseException implements RuntimeExceptionInterface {}

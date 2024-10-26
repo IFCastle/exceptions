@@ -305,7 +305,8 @@ class Registry
 
     public static function fatalErrorHandler(): void
     {
-        $error                      = \error_get_last();
+        // !Warning! You should not call error_get_last in root namespace!
+        $error                      = error_get_last();
 
         if (!\is_array($error) || !\in_array($error['type'], self::$FATAL)) {
             return;

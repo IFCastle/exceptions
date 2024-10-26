@@ -1,96 +1,43 @@
+
 # Registry
 
-> Функциональность `Registry` и `StorageInterface` является устаревшей и не рекомендуется к использованию.
+> The `Registry` and `StorageInterface` functionality is outdated and not recommended for use.
 
-Класс `Registry` является статическим. Хотя в `PHP` пока нет статических классов по типу C#, в `Registry` вызов конструктора запрещён.
+The `Registry` class is static. Although PHP does not yet support static classes like C#, the constructor call in `Registry` is prohibited.
 
-`Registry` обеспечивает регистрацию исключений до того, как они будут помещены в журнал. Для этого `Registry` использует Хранилище, которое может быть переопределено программистом:
+`Registry` registers exceptions before they are logged. For this, `Registry` uses Storage, which can be overridden by the developer:
 
 ```php
     static public function set_registry_storage(StorageI $storage)
 ```
 
-Интерфейс `StorageInterface` содержит всего несколько методов, и позволяет влиять на ход регистрации исключений.
+The `StorageInterface` interface contains only a few methods and allows influence over the exception registration process.
 
-Дополнительное расширение функциональности `Registry` можно получить, используя методы:
+Additional functionality extension in `Registry` can be obtained using methods:
 
-- `set_unhandled_handler` - необработанные исключения.
-- `set_fatal_handler`     - ошибка с флагом `is_fatal`.
+- `set_unhandled_handler` - unhandled exceptions.
+- `set_fatal_handler` - error with `is_fatal` flag.
 
-Метод `set_unhandled_handler` используется тогда, когда `Registry` позволено обрабатывать потоки ошибок и исключений `PHP`. Для этого нужно вызвать метод `Registry::install_global_handlers()`, после чего в реестр начнут попадать все необработанные исключения и ошибки.
+The `set_unhandled_handler` method is used when `Registry` is allowed to handle PHP error and exception streams. To enable this, call the `Registry::install_global_handlers()` method, after which all unhandled exceptions and errors will begin to enter the registry.
 
-Обработчик `set_unhandled_handler` будет вызван после основного обработчика `Registry::exception_handler(\Exception $exception)`.
+The `set_unhandled_handler` will be called after the main handler `Registry::exception_handler(\Exception $exception)`.
 
-Метод `set_fatal_handler` будет рассмотрен подробнее в "Fatal Exception".
+The `set_fatal_handler` method will be discussed in detail in "Fatal Exception."
 
-## Журналирование ошибок PHP
+## PHP Error Logging
 
-`Registry` поддерживает журналирование не только исключений, но и потока ошибок `PHP`. Для этого он использует класс `Exceptions\Errors\Error`, который хотя и не является исключением, но реализует интерфейс `BaseExceptionI`.
+`Registry` supports logging not only exceptions but also PHP error streams. For this, it uses the `Exceptions\Errors\Error` class, which, although not an exception, implements the `BaseExceptionI` interface.
 
-Все ошибки кроме `E_USER_*`, считаются ошибками программиста, и попадают в общий журнал. Это же касается `E_NOTICE` и `E_DEPRECATED`. 
+All errors except `E_USER_*` are considered programmer errors and enter the general log. This also applies to `E_NOTICE` and `E_DEPRECATED`.
 
-Таким образом `Registry` требует, чтобы код `PHP` был полностью чист от предупреждений любого рода.
+Thus, `Registry` requires PHP code to be completely free of any warnings.
 
-## Необработанные исключения
+## Unhandled Exceptions
 
-Что произойдёт с исключением, если оно не было обработано и попало в `Registry::exception_handler()`? 
+What happens if an exception goes unhandled and enters `Registry::exception_handler()`?
 
 ```php
         if($exception instanceof BaseExceptionI)
         {
-            // Если исключение достигает обработчика
-            // оно не логируется в случае, если:
-            // - уже было журналированным
-            // - или если является контейнером для другого исключения
-            if($exception->is_loggable() || $exception->is_container())
-            {
-                new UnhandledException($exception);
-                return;
-            }
-
-            $exception->set_loggable(true);
-        }
-
-        self::register_exception($exception);
-
-        new UnhandledException($exception);
-        ...
 ```
 
-`Registry` придерживается алгоритма:
-
-1. Если исключение `BaseException` имеет сброшенный флаг `is_loggable` оно всё равно будет журналировано как необработанное.
-2. Если исключение уже находится в журнале - нет смысла его помещать туда снова.
-3. Если исключение является контейнером, то ответственность за журналирование лежит на нём.
-
-Обратите внимание на `new UnhandledException($exception)`. Это исключение используется только как маркер факта, что последнее исключение не было поймано:
-
-```php
-class UnhandledException extends LoggableException
-{
-    public function __construct(\Exception $exception)
-    {
-        parent::__construct
-        ([
-            'message'   => 'Unhandled Exception',
-            'type'      => get_class($exception),
-            'source'    => self::get_source_for($exception),
-            'previous'  => $exception
-        ]);
-    }
-}
-```
-
-Таким образом в журнале сохранится отдельная запись об необработанном исключении, и можно будет отличить два случая: когда целевое исключение было обработано, а когда - нет.
-
-## Двойное журналирование
-
-Нужно отметить, что возможен особый случай двойного журналирования:
-
-1. Исключение имеет установленный флаг `is_loggable` и попадает в журнал.
-2. Другой код ловит исключение, и сбрасывает флаг
-3. Другой код снова выбрасывает это же исключение
-4. Исключение становится наобработанным.
-5. Так как его флаг `is_loggable` равен `false`, оно логируется заново.
-
-Я решил оставить данный Use Case как есть, и допустить двойную запись исключения, так как, если в коде происходит что-то подобное, значит его нужно срочно пересмотреть.

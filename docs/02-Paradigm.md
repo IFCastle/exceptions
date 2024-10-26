@@ -1,22 +1,20 @@
+
 # Paradigm
 
-## Исключения и логирование
+## Exceptions and Logging
 
-Создание классов исключений тесно связаны с методикой логирования.
+Creating exception classes is closely related to the logging methodology.
 
-Исключения создаются с двумя целями:
+Exceptions are created with two goals:
 
-1. Передать информацию о произошедшей ошибке для кода.
-2. Предоставить достаточную информацию для логирования.
+1. To convey information about the error to the code.
+2. To provide sufficient information for logging.
 
-Для решения первой задачи, используются классы и интерфейсы, позволяя коду по типу исключения определить, что произошло.
-Для решения второй задачи, используются метаданные исключения, которые позволяют логировать исключения с дополнительной информацией.
+To accomplish the first task, classes and interfaces are used, allowing the code to determine the error type. To achieve the second goal, exception metadata is used, allowing exceptions to be logged with additional information.
 
-Поэтому, создавая новый класс исключения, необходимо учитывать, 
-что он должен содержать метаданные, которые будут использоваться для логирования.
+Therefore, when creating a new exception class, it is essential to consider that it should contain metadata used for logging.
 
 ```php
-
 final class UserNotAllowed extends \IfCastle\Exceptions\BaseException
 {
     protected string $template      = 'User {user} from {ip} is not allowed';
@@ -29,26 +27,23 @@ final class UserNotAllowed extends \IfCastle\Exceptions\BaseException
             'ip'   => $ip
         ]);
     }
-
+}
 ```
 
-В данном примере, класс `UserNotAllowed` содержит шаблон сообщения и теги, которые будут использоваться для логирования.
-Когда это исключение попадёт в логгер, он сможет использовать шаблон сообщения и теги для формирования сообщения об ошибке.
+In this example, the `UserNotAllowed` class contains a message template and tags used for logging. When this exception is logged, the logger can use the message template and tags to form an error message.
 
 ```php
     $exception = new UserNotAllowed('admin', '127.0.0.1');
     $logger->error($exception);
 ```
 
-Если в качестве системы логирования вы используете OpenTelemetry, 
-в таком случае метаданные исключения будут использоваться для формирования атрибутов,
-которые попадут в трейсер вместе с тегами и шаблоном сообщения.
+If you use OpenTelemetry as your logging system, the exception metadata will be used to form attributes that will be included in the tracer along with tags and the message template.
 
-## Исключения и теги
+## Exceptions and Tags
 
-Теги позволяют сгруппировать исключения произвольным образом.
+Tags allow grouping exceptions in an arbitrary manner.
 
-Создавая класс исключения можно определить теги, которые позже попадут в логгер.
+When creating an exception class, you can define tags that will later be included in the logger.
 
 ```php
 final class MyException extends \IfCastle\Exceptions\BaseException
@@ -57,32 +52,8 @@ final class MyException extends \IfCastle\Exceptions\BaseException
 }
 ```
 
-Вы так же можете передать теги в конструкторе исключения.
+You can also pass tags in the exception constructor.
 
 ```php
-    $exception = new MyException(['tags' => ['custom', 'tag']]);
-    $logger->error($exception);
+    $exception = new MyException();
 ```
-
-Теги, добавленные в конструкторе, будут объединены с тегами, определёнными в классе исключения.
-
-## Исключения и аспекты
-
-Иногда нужно разделить разные исключения по особым типам обработки. 
-Например, некоторые исключения могут быть показаны пользователю, в то время, когда другие -- нет.
-
-`BaseException` предлагает для этого специальный интерфейс: `ClientAvailableInterface`, 
-который указывает, что исключение может быть показано пользователю.
-
-Интерфейс так же содержит дополнительные методы:
-* `getClientMessage`
-* `clientSerialize`
-
-Которые позволяют получить сообщение для пользователя и сериализовать исключение для клиента особым образом, 
-в то время как в журнал будут записаны метаданные исключения.
-
-Кроме аспекта `ClientAvailableInterface`, `BaseException` так же предлагает такие аспекты:
-* `SystemExceptionInterface` - исключение, которое произошло из-за ошибки в системе, например диск переполнен.
-* `RuntimeExceptionInterface` - исключение, которое случилось во время работы программы, но не является ошибкой программиста.
-
-Все другие исключения считаются ошибками программиста и не должны быть показаны пользователю.

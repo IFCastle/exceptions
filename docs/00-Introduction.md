@@ -1,88 +1,37 @@
+
 # Introduction
 
-**BaseException** - библиотека унификации исключений для *PHP*.
+**BaseException** is a library for exception unification in *PHP*.
 
-**BaseException** решает задачи:
+**BaseException** addresses the following tasks:
 
-1. Метаданные исключений.
-2. Шаблонизация сообщений.
-2. Аспектирование исключений.
-3. Нормализация исключений при помощи "контейнеров".
-4. Регистрация исключений в глобальном реестре.
+1. Exception metadata.
+2. Message templating.
+3. Exception aspectization.
+4. Exception normalization using "containers."
+5. Exception registration in a global registry.
 
-## Метаданные исключений и шаблонизация
+## Exception Metadata and Templating
 
-При анализе исключений важно иметь ясное представление о том, что произошло.
-Для этого необходимо хранить метаданные исключения, которые помогут в дальнейшем анализе.
-Данная библиотека реализует возможность создавать исключения с контекстом, который содержит метаданные исключения.
+When analyzing exceptions, it is important to have a clear understanding of what happened. For this, it is necessary to store exception metadata to assist in further analysis. This library enables the creation of exceptions with context that includes exception metadata.
 
-Метаданные исключения представляют собой ассоциативный массив,
-элементами которого могут быть только простые типы данных.
+Exception metadata is an associative array containing only simple data types.
 
-## Поддержка шаблонов сообщений
+## Support for Message Templates
 
-**BaseException** поддерживает концепцию *шаблона сообщения* (начиная с версии 2.0). 
-Шаблон сообщения - это строка, содержащая *placeholders*, 
-которые заменяются на значения данных из контекста исключения. 
-Формат шаблона соответствует [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md).
+**BaseException** supports the concept of *message templates* (starting from version 2.0). A message template is a string containing *placeholders*, which are replaced with context data values. The template format complies with [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md).
 
-Когда исключение создаётся, в конструктор передаются данные, 
-которые будут использоваться для замены *placeholders* в шаблоне сообщения.
-Конструктор использует шаблон и генерирует описание исключения по шаблону и метаданным.
+When an exception is created, data is passed to the constructor to replace *placeholders* in the message template. The constructor uses the template and generates a description of the exception based on the template and metadata.
 
-Шаблон исключения позволяет добиться нескольких важных бенефитов:
-* Возможность перевода сообщений об ошибках на разные языки, основываясь на шаблоне.
-* Возможность группировать исключения по шаблону.
+The exception template provides several important benefits:
+- Ability to translate error messages into different languages based on the template.
+- Ability to group exceptions by template.
 
-Шаблонизация сообщений позволяет записать в журнал не только результирующее сообщение, 
-но и данные, которые были использованы для его формирования:
+Message templating allows logging not only the resulting message but also the data used to form it:
 
 ```php
     $exception = new BaseException(['template' => 'User {user} from {ip} is not allowed', 'user' => $user, 'ip' => $ip]);
     $logger->error($exception);
 ```
 
-Это даёт возможность в дальнейшем анализировать журнал и понимать, 
-какие данные были использованы для формирования сообщения об ошибке, 
-группировать исключения по шаблону, либо делать поиск по метаданным.
-
-## Аспектирование исключений
-
-Аспект - это класс характеристик исключения, который позволяет обобщать код и задачи по обработке исключений. 
-Например, аспекты позволяют ответить на вопросы:
-
-- кто виноват: программист или система;
-- что делать: игнорировать проблему или немедленно решать.
-
-## Нормализация исключений
-
-Нормализация исключений - это поддержка системой ограниченного числа выброшенных исключений. 
-Она может достигаться такими способами:
-
-1. Наследование.
-2. Привидение к контейнеру.
-3. Интерфейсы.
-
-Например, привидение к контейнеру:
-
-```php
-    try
-    {
-        ...
-    }
-    catch(\Exception $e)
-    {
-        // BaseException наследует характеристики $e
-        throw new BaseException($e);
-    }
-```
-
-## Регистрация исключений
-
-**BaseException** позволяет регистрировать исключения в глобальном реестре до того, как исключение, будет выброшено.
-На текущий момент эта возможность существует, но не используется на практике.
-Тем не менее в некоторых ситуациях, она может стать дополнительным инструментом для анализа исключений.
-
-## Небольшая библиотека готовых исключений
-
-Кроме реализации сервисного кода, **BaseException** так же содержит небольшой список готовых классов для создания типичных исключений.
+This makes it possible to analyze the log later and understand what data was used to form the error message.

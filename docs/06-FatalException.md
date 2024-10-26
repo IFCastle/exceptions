@@ -1,10 +1,9 @@
+
 # Fatal Exception
 
-Аспект "Фатальная ошибка" реализован в виде свойства `isFatal`, а так же публичного метода: `isFatal()`. 
-Интересно заметить, что по сравнению с флагом `isLoggable()` 
-у флага `isFatal` нет возможности сброса (разве что изнутри класса).
+The "Fatal Error" aspect is implemented as a property `isFatal` and a public method `isFatal()`. Notably, unlike the `isLoggable()` flag, the `isFatal` flag cannot be reset (except from within the class).
 
-Так как `isFatal` - это свойство, то фатальным может стать любое исключение в любой момент времени:
+Since `isFatal` is a property, any exception can become fatal at any time:
 
 ```php
     try
@@ -17,7 +16,7 @@
     }
 ```
 
-Можно так же использовать исключение-контейнер, чтобы наделить этой характеристикой другое исключение:
+A container exception can also be used to assign this characteristic to another exception:
 
 ```php
     try
@@ -26,21 +25,21 @@
     }
     catch(BaseException $e)
     {
-        // Теперь исключение $e - имеет аспект фатального.
+        // Now the exception $e has the fatal aspect.
         throw new FatalException($e);
     }
 ```
 
-## Обработчик фатальных исключений
+## Fatal Exception Handler
 
-`Registry` предоставляет метод `Registry::setFatalHandler($callback)` для обработки появления фатальных исключений.
+`Registry` provides the method `Registry::setFatalHandler($callback)` to handle fatal exceptions.
 
-Прототип обработчика:
+Handler prototype:
 
 ```php
     function(BaseExceptionI $exception)
     {
-        // Если это контейнер - используем его содержимое
+        // If this is a container, use its content
         if($exception->isContainer())
         {
             $real_exception = $exception->getPrevious();
@@ -53,24 +52,22 @@
     }
 ```
 
-Обработчик фатальных исключений вызывается в момент, когда исключение становится фатальным, то есть:
+The fatal exception handler is called when an exception becomes fatal, specifically:
 
-1. В конце конструктора исключения `BaseException`.
-2. В момент вызова метода `setFatal()`.
+1. At the end of the `BaseException` constructor.
+2. When calling the `setFatal()` method.
 
-Обработчик фатального исключения вызывается не для журналирования. 
-Он нужен для введения особого специального алгоритма, в условиях возможной нехватки ресурсов. 
-Возможные задачи обработчика таковы:
+The fatal exception handler is not intended for logging. It is needed to implement a specific algorithm under resource-limited conditions. Possible tasks of the handler include:
 
-- остановить программу или сервис;
-- предотвратить повторные запуски work-еров, пока проблема не решиться;
-- запустить процесс анализа сбоя.
+- Stopping the program or service;
+- Preventing worker restarts until the issue is resolved;
+- Initiating a failure analysis process.
 
-## Особенности обработки для журнализатора
+## Logging Specifics for Fatal Exceptions
 
-Журнализатор так же может обрабатывать фатальное исключение не так, как обычно:
+The logger may also handle a fatal exception differently:
 
-1. Проверить возможность записи на диск или в файл журнала.
-2. Если файл журнала не доступен, попытаться использовать системный журнал.
-3. Использовать EMAIL для отправки уведомления.
-4. Если EMAIL не работает, использовать альтернативные каналы.
+1. Check the ability to write to disk or log file.
+2. If the log file is unavailable, attempt to use the system log.
+3. Use EMAIL to send a notification.
+4. If EMAIL fails, use alternative channels.

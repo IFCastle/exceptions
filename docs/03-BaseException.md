@@ -11,42 +11,44 @@
 Наследуемые исключения могут так же прозрачно поддерживать эти режимы, а могут перекрывать их своим конструктором.
 
 Например, класс `UnexpectedValue`, может вести себя как `BaseException`, 
-если параметр `$name` будет иметь тип отличный от скаляра.
+если параметр `$name` будет массивом.
 
 ```php
-    class UnexpectedValue   extends LoggableException
+/**
+ * The variable has an unexpected value!
+ */
+class UnexpectedValue extends LoggableException
+{
+    protected string $template      = 'Unexpected value {value} occurred in the variable {name}';
+    
+    /**
+     * The variable has an unexpected value!
+     *
+     * @param string|array $name                        Variable name
+     *                                                  or list of parameters for exception
+     * @param mixed        $value                       Value
+     * @param string|class-string|null  $rules          Rules description
+     */
+    public function __construct(array|string $name, mixed $value = null, string|null $rules = null)
     {
-        public function __construct(string|array $name, mixed $value = null, string $rules = null)
-        {
-            if(!is_scalar($name))
-            {
-                parent::__construct($name);
-                return;
-            }
-
-            parent::__construct
-            ([
-                'message'     => 'Unexpected value',
-                'name'        => $name,
-                'value'       => self::truncate($value),
-                'rules'       => $rules,
-                'type'        => self::get_value_type($value)
-            ]);
+        if (!\is_scalar($name)) {
+            parent::__construct($name);
+            return;
         }
+
+        parent::__construct([
+            'name'        => $name,
+            'value'       => $this->toString($value),
+            'message'     => $rules,
+            'type'        => $this->typeInfo($value),
+        ]);
     }
+}
 ```
 
 ## Шаблоны сообщений
 
-Исключения содержат свойство `message`, которое в общем случае является уникальным для каждого экземпляра класса, 
-что исключает возможность интернационализации. 
-Также с точки зрения разделения знаний лучше не смешивать описание ошибки с данными из контекста.
-
-Шаблоны сообщений решают данную задачу, определяя текст шаблона ошибки, который формирует сообщение `message`.
-
-Так как базовый класс `\Exception` запрещает переопределять метод `getMessage()`, 
-шаблон формируется в отдельном свойстве `template` и может быть инициализирован через конструктор `BaseException`. 
-Однако правилом хорошего тона является определение шаблона в дочернем классе, при помощи переопределения свойства:
+Каждое исключение может иметь свой уникальный шаблон сообщения, которые можно определить в свойстве `template`:
 
 ```php
 class UnexpectedValueType   extends LoggableException
@@ -54,9 +56,21 @@ class UnexpectedValueType   extends LoggableException
     protected $template         = 'Unexpected type occurred for the value {name} and type {type}. Expected {expected}';
 ```
 
+Шаблон сообщения так же может быть передан в контексте исключения с помощью специального ключа `template`:
+
+```php
+    $exception = new UnexpectedValueType
+    ([
+        'template'  => 'Custom template {name} {type} {expected}',
+        'name'      => 'test',
+        'type'      => 'string',
+        'expected'  => 'integer'
+    ]);
+```
+
 Формат строки шаблона соответствует правилам [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md). 
 
-Если исключение определяет шаблон, тогда конструктор `BaseException` работает иначе:
+Если исключение определяет шаблон, тогда конструктор `BaseException` работает следующим образом:
 
 1. *Placeholders* шаблона заменяются данными из контекста, и передаются в конструктор `\Exception`. 
 Таким образом, метод `getMessage()` вернёт полный текст ошибки.
@@ -78,6 +92,19 @@ class UnexpectedValueType   extends LoggableException
 
 ``` 
 
+## Управление журналированием
+
+Класс `BaseException` имеет два флага, которые управляют журналированием:
+* `isLoggable` - флаг, указывающий, что исключение должно быть записано в журнал.
+* `isFatal`    - флаг, указывающий, что исключение является фатальным.
+
+Каким образом эти флажки будут использоваться, зависит от реализации журналирования, однако общие правила таковы:
+1. Если не установлен флаг `isLoggable`, то исключение не будет записано в журнал.
+2. Если исключение является фатальным, то оно будет записано в журнал.
+3. Если исключение не является фатальным, но установлен флаг `isLoggable`, то оно будет записано в журнал.
+
+Фатальные исключения могут быть обработаны особым образом, но это зависит от реализации.
+
 ## Наследование
 
 В большинстве случаев дочерний класс переопределяет только конструктор, так как ему нужно сформировать данные исключения.
@@ -92,7 +119,8 @@ class UnexpectedValueType   extends LoggableException
 3. Если `BaseException::isLoggable` финализировать исключение.
 4. Если `BaseException::isFatal` вызвать обработчик фатальных исключений.
 
-Конструктор может изменять любые свойства после своего вызова. Поэтому, если вам нужно модифицировать свойства класса окончательно, делайте это после вызова базового конструктора.
+Конструктор может изменять любые свойства после своего вызова. 
+Поэтому, если нужно модифицировать свойства класса окончательно, делайте это после вызова базового конструктора.
 
 Изменение свойств флажков (с префиксом `is`) вызывает изменение в поведении базового конструктора.
 
@@ -191,7 +219,7 @@ class UnexpectedValueType   extends LoggableException
         public function __construct($name, $value = null)
         {
             // Для журнала отладки сохраним полные данные:
-            $this->set_debug_data(['value' => $value]);
+            $this->setDebugData(['value' => $value]);
 
             parent::__construct
             ([
@@ -211,9 +239,9 @@ class UnexpectedValueType   extends LoggableException
         public function __construct($name, $value = null)
         {
             // Принудительное включение режима отладки
-            $this->is_debug       = true;
+            $this->isDebug      = true;
             // Для отладчика сохраним полные данные:
-            $this->set_debug_data(['value' => $value]);
+            $this->setDebugData(['value' => $value]);
 
             parent::__construct
             ([
@@ -265,10 +293,14 @@ class UnexpectedValueType   extends LoggableException
 
 Исключения контейнеры возвращают сериализацию не самих себя, а исключения `previous`.
 
-За общую сериализацию/десериализацию отвечают статические методы:
+За общую сериализацию/десериализацию отвечают  методы:
 
-- `BaseException::errors_to_array()`;
-- `BaseException::array_to_errors()`.
+- `BaseException::toArray()`;
+- `BaseException::arrayToErrors()`.
+
+Метод arrayToErrors является защищённым, и предназначен для использования в дочерних классах, только в том случае, 
+если исключение может быть восстановлено из сериализованных данных. 
+Обычно такие исключения являются DTO объектами, что не является общим случаем.
 
 ## Особенности
 
@@ -315,11 +347,11 @@ class UnexpectedValueType   extends LoggableException
     catch(BaseException $e)
     {
         // out: Test\ZClass->zfun
-        echo implode('', $exception->get_source());        
+        echo implode('', $exception->getSource());        
     }
 ```
 
-Для вычисления источника классов `PHP` `\Exception` используйте метод `BaseException::get_source_for()`.
+Для вычисления источника классов `PHP` `\Exception` используйте метод `HelperTrait::getSourceFor()`.
 
 ### Определение вложенного исключения
 

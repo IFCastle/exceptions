@@ -97,6 +97,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
     #[\Override]
     protected function setUp(): void
     {
+        Registry::$isActive = true;
         Registry::resetExceptionLog();
 
         $this->testData =

@@ -85,7 +85,7 @@ The container is used to change the flag `is_loggable`:
 class ClassNotExist  extends BaseException
 {
     // This exception will be logged
-    protected $is_loggable = true;
+    protected $isLoggable = true;
 
     /**
      * ClassNotExist
@@ -111,8 +111,8 @@ class ClassNotExist  extends BaseException
 ```php
 class MyFatalException  extends BaseException
 {
-    // This exception has aspect: "fatal"
-    protected $is_fatal    = true;
+    // This exception has an aspect: "fatal"
+    protected $isFatal    = true;
 }
 ```
 
@@ -123,14 +123,8 @@ class MyException  extends BaseException
 {
     public function __construct($object)
     {
-        $this->set_debug_data($object);
+        $this->setDebugData($object->toArray());
         parent::__construct('its too bad!');
     }
 }
 ```
-
-## BaseException static methods
-
-## Registry
-
-## StorageInterface

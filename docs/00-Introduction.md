@@ -39,7 +39,7 @@
 
 ```php
     $exception = new BaseException(['template' => 'User {user} from {ip} is not allowed', 'user' => $user, 'ip' => $ip]);
-    $logger->error($exception->getMessage(), $exception->getExceptionData());
+    $logger->error($exception);
 ```
 
 Это даёт возможность в дальнейшем анализировать журнал и понимать, 

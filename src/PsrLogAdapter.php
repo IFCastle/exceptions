@@ -38,6 +38,7 @@ final readonly class PsrLogAdapter implements LoggerInterface
         $context['tags']            = array_merge($context['tags'] ?? [], $message->getTags());
         $context['exception_data']  = $message->getExceptionData();
         $context['exception_debug'] = $message->getDebugData();
+        $context['exception_template'] = $message->template();
         
         $this->logger->log($level, $message->getMessage(), $context);
     }

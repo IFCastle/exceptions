@@ -200,12 +200,12 @@ class BaseException extends \Exception implements BaseExceptionInterface
         }
 
         // The container is never in the journal
-        if ($this->isLoggable && $this->isContainer === false) {
+        if (Registry::$isActive && $this->isLoggable && $this->isContainer === false) {
             Registry::registerException($this);
         }
 
         // The handler for fatal exceptions
-        if ($this->isFatal) {
+        if (Registry::$isActive && $this->isFatal) {
             Registry::callFatalHandler($this);
         }
     }

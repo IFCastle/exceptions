@@ -16,6 +16,12 @@ namespace IfCastle\Exceptions;
 class Registry
 {
     /**
+     * Flag for global handler.
+     * @var bool
+     */
+    public static bool $isActive = false;
+    
+    /**
      * Options for logger.
      * @var array|\ArrayAccess
      */

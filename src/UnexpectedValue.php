@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IfCastle\Exceptions;
 
 /**
- * The variable has unexpected value!
+ * The variable has an unexpected value!
  */
 class UnexpectedValue extends LoggableException
 {

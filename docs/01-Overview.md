@@ -133,4 +133,4 @@ class MyException  extends BaseException
 
 ## Registry
 
-## StorageI
+## StorageInterface

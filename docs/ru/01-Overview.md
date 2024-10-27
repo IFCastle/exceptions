@@ -9,22 +9,21 @@
     throw new BaseException('message', 0, $previous);
 ```
 
-Список параметров:
+Конструктор со списком метаданных:
 
 ```php
-    // использование array()
     $exception = new BaseException
     ([
         'message'     => 'message',
         'code'        => 0,
         'previous'    => $previous,
-        'mydata'      => [1,2,3]
+        'myData'      => [1,2,3]
     ]);
 
     ...
 
-    // print_r([1,2,3]);
-    print_r($exception->get_data());
+    // print_r(['myData' => 1,2,3]);
+    print_r($exception->getExceptionData());
 ```
 
 Исключение-контейнер:
@@ -49,7 +48,7 @@
     }
 ```
 
-Контейнер используется для изменения флага `is_loggable`:
+Контейнер используется для изменения флага `isLoggable`:
 
 ```php
     try
@@ -82,6 +81,10 @@ class ClassNotExist extends BaseException
 {
     // Это исключение будет журналироваться
     protected $isLoggable = true;
+    // Шаблон исключения
+    protected $template = 'Class {class} does not exist';
+    // Теги для поиска исключения в журнале
+    protected array $args = ['class'];
 
     /**
      * ClassNotExist
@@ -104,8 +107,29 @@ class ClassNotExist extends BaseException
 
 ## FatalException
 
+Исключение можно отметить как фатальное, а после использовать это свойство в обработчике исключений.
+
 ```php
-class MyFatalException extends BaseException
+class MyFatalException  extends BaseException
 {
-    // Это исключение имеет аспект "fatal"
-    protected $isFatal = true;
+    // This exception has an aspect: "fatal"
+    protected $isFatal    = true;
+}
+```
+
+## Debug data
+
+Отладочные данные могут быть добавлены в исключение, и стать доступными для анализа в журнале, 
+если отладочный режим активирован.
+
+```php
+class MyException  extends BaseException
+{
+    public function __construct(object $object)
+    {
+        $this->setDebugData($object->toArray());
+        
+        parent::__construct('some message');
+    }
+}
+```

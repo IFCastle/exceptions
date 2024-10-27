@@ -2,35 +2,32 @@
 
 # BaseException::__construct()
 
-The basic use:
+Basic usage:
 
 ```php
     throw new BaseException('message', 0, $previous);
 ```
 
-List of parameters:
+Constructor with metadata list:
 
 ```php
-    // use array()
     $exception = new BaseException
     ([
         'message'     => 'message',
         'code'        => 0,
         'previous'    => $previous,
-        'mydata'      => [1,2,3]
+        'myData'      => [1,2,3]
     ]);
 
     ...
 
-    // print_r([1,2,3]);
-    print_r($exception->get_data());
-
+    // print_r(['myData' => 1,2,3]);
+    print_r($exception->getExceptionData());
 ```
 
-Container-Exception:
+Container exception:
 
 ```php
-
     try
     {
         try
@@ -39,58 +36,59 @@ Container-Exception:
         }
         catch(\Exception $e)
         {
-            // inherits data Exception
+            // inherits exception data
             throw new BaseException($e);
         }
     }
     catch(BaseException $exception)
     {
-        // out "test"
+        // outputs "test"
         echo $exception->getMessage();
     }
-
 ```
 
-The container is used to change the flag `is_loggable`:
+Container is used to change the `isLoggable` flag:
 
 ```php
-
     try
     {
         try
         {
-            // not loggable exception!
+            // exception that should not be logged!
             throw new BaseException('test');
         }
         catch(\Exception $e)
         {
-            // log BaseException, but don't log LoggableException
+            // log BaseException, but not LoggableException
             throw new LoggableException($e);
         }
     }
     catch(LoggableException $exception)
     {
-        // echo: "true"
+        // output: "true"
         if($exception->getPrevious() === $e)
         {
             echo 'true';
         }
     }
-
 ```
 
-## Inheriting from the BaseException
+## Inheriting from BaseException
 
 ```php
-class ClassNotExist  extends BaseException
+class ClassNotExist extends BaseException
 {
     // This exception will be logged
     protected $isLoggable = true;
+    // Exception template
+    protected $template = 'Class {class} does not exist';
+    // Tags for finding the exception in the log
+    protected array $args = ['class'];
 
     /**
      * ClassNotExist
      *
-     * @param       string      $class         Class name
+     * @param string $class Class name
      */
     public function __construct($class)
     {
@@ -108,6 +106,8 @@ class ClassNotExist  extends BaseException
 
 ## FatalException
 
+An exception can be marked as fatal, and then this property can be used in the exception handler.
+
 ```php
 class MyFatalException  extends BaseException
 {
@@ -118,13 +118,17 @@ class MyFatalException  extends BaseException
 
 ## Debug data
 
+Debug data can be added to the exception and become available for analysis in the log 
+if debug mode is activated.
+
 ```php
 class MyException  extends BaseException
 {
-    public function __construct($object)
+    public function __construct(object $object)
     {
         $this->setDebugData($object->toArray());
-        parent::__construct('its too bad!');
+        
+        parent::__construct('some message');
     }
 }
 ```

@@ -9,8 +9,12 @@ use IfCastle\Exceptions\Resource\ResourceReadError;
 class FileReadError extends ResourceReadError implements FileSystemExceptionInterface
 {
     protected string $system   = self::SYSTEM;
-
-    public function __construct($resource, string $type = 'file')
+    
+    /**
+     * @param string|object|resource|array<string, scalar|scalar[]> $resource
+     * @param string $type
+     */
+    public function __construct(mixed $resource, string $type = 'file')
     {
         parent::__construct($resource, $type);
     }

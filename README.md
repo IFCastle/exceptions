@@ -2,8 +2,8 @@ BaseException [![PHP Composer](https://github.com/EdmondDantes/amphp-pool/action
 
 =============
 
-Base Exception Library for PHP 8.2+
-(The latest version: 5.0.0)
+Base Exception Library for PHP 8.3+
+(The latest version: 5.1.0)
 
 Missions:
 
@@ -85,6 +85,29 @@ List of parameters:
     // print_r([1,2,3]);
     print_r($exception->getExceptionData());
 
+```
+
+## Monolog integration
+
+The processor for `Monolog` allows populating exception metadata in the log.
+
+```php
+<?php
+
+use Monolog\Level;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use IfCastle\Exceptions\LoggableException;
+use IfCastle\Exceptions\MonologProcessor;
+
+$log = new Logger('name');
+$log->pushProcessor(new MonologProcessor());
+
+// Put some records to the log
+$log->error(
+    'this is a loggable exception', 
+    ['exception' => new LoggableException('this is a loggable exception')]
+);
 ```
 
 ## Exception Container

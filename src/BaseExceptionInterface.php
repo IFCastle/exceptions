@@ -81,7 +81,7 @@ interface BaseExceptionInterface extends \Throwable
     /**
      * Template message.
      */
-    public function template(): string;
+    public function getTemplate(): string;
 
     /**
      * @return string[]

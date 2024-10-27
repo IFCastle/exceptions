@@ -27,7 +27,8 @@
         "phpunit/phpunit": "^11.2",
         "rector/rector": "^1.2",
         "ifcastle/codestyle": "^0.1.7",
-        "phpstan/phpstan": "^1.12"
+        "phpstan/phpstan": "^1.12",
+        "monolog/monolog": "^3.7"
     },
     "scripts": {
         "test": "vendor/bin/phpunit --coverage-clover=coverage/clover.xml --coverage-filter=src ./tests",

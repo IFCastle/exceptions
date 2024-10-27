@@ -230,7 +230,7 @@ class Error extends \ErrorException implements BaseExceptionInterface
     }
 
     #[\Override]
-    public function template(): string
+    public function getTemplate(): string
     {
         return '';
     }

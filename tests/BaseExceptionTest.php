@@ -30,19 +30,16 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test data for the exception.
-     * @var array
      */
     protected array $testData;
 
     /**
      * Exception info.
-     * @var array
      */
     protected array $testBaseData;
 
     /**
      * Exception.
-     * @var \IfCastle\Exceptions\BaseException
      */
     protected BaseException $BaseException;
 

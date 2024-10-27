@@ -224,7 +224,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
      * Returns template message.
      */
     #[\Override]
-    public function template(): string
+    public function getTemplate(): string
     {
         return $this->template;
     }
@@ -413,14 +413,14 @@ class BaseException extends \Exception implements BaseExceptionInterface
         }
 
         // override the exception message if the template was defined
-        $message = $this->template() !== '' ? $this->getExceptionData()['message'] ?? '' : $this->getMessage();
+        $message = $this->getTemplate() !== '' ? $this->getExceptionData()['message'] ?? '' : $this->getMessage();
 
         return
         [
             'type'      => static::class,
             'source'    => $this->getSource(),
             'message'   => $message,
-            'template'  => $this->template(),
+            'template'  => $this->getTemplate(),
             'tags'      => $this->getTags(),
             'code'      => $this->getCode(),
             'data'      => $this->getExceptionData(),

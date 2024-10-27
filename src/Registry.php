@@ -19,7 +19,6 @@ class Registry
 {
     /**
      * Flag for global handler.
-     * @var bool
      */
     public static bool $isActive = false;
     

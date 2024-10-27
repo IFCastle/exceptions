@@ -142,7 +142,7 @@ class ArraySerializerTraitTest extends \PHPUnit\Framework\TestCase
 
         foreach ($results as $exception) {
             $this->assertInstanceOf(BaseExceptionInterface::class, $exception);
-            $this->assertEquals('test template with {code} and {exdata}', $exception->template());
+            $this->assertEquals('test template with {code} and {exdata}', $exception->getTemplate());
             $this->assertEquals(
                 'test template with ' . ($i + 10) . ' and \'' . ($i - 10) . '\'. test message' . ($i + 5),
                 $exception->getMessage(),

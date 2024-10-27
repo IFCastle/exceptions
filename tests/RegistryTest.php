@@ -379,12 +379,6 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($is_call, '$callback isn\'t called');
     }
 
-    /**
-     * @covers \Registry::call_fatal_handler
-     * @covers \Registry::set_fatal_handler
-     * @covers \BaseException::is_fatal
-     * @covers \BaseException::set_fatal
-     */
     public function testFatalHandler(): void
     {
         // Case 1: Exception-container
@@ -395,8 +389,6 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
 
         $callback   = function ($actual_exception) use ($exception, &$is_call) {
             $this->assertInstanceOf(FatalException::class, $actual_exception);
-
-            /* @var $actual_exception \Exceptions\FatalException */
 
             $this->assertTrue(
                 $actual_exception->getPreviousException() === $exception,

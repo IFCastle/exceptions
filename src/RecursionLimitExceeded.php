@@ -14,7 +14,7 @@ class RecursionLimitExceeded extends LoggableException
     /**
      * Reached a maximum depth of recursion.
      *
-     * @param       int|string|array           $limit          maximum depth
+     * @param       int|string|array<string, scalar|scalar[]>           $limit          maximum depth
      */
     public function __construct(array|string|int $limit)
     {

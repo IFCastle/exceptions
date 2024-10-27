@@ -8,7 +8,7 @@ use IfCastle\Exceptions\Errors\Error;
 
 class DebugException extends BaseException
 {
-    public const DEBUG_DATA        = 'test debug data';
+    public const string DEBUG_DATA = 'test debug data';
 
     public function __construct(\IfCastle\Exceptions\BaseExceptionInterface|\Throwable|array|string $exception, int $code = 0, ?\Throwable $previous = null)
     {
@@ -32,19 +32,19 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
      * Test data for the exception.
      * @var array
      */
-    protected $test_data;
+    protected array $testData;
 
     /**
      * Exception info.
      * @var array
      */
-    protected $test_base_data;
+    protected array $testBaseData;
 
     /**
      * Exception.
      * @var \IfCastle\Exceptions\BaseException
      */
-    protected $BaseException;
+    protected BaseException $BaseException;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -53,21 +53,21 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->test_data    =
+        $this->testData =
         [
             'level'         => \IfCastle\Exceptions\BaseExceptionInterface::CRITICAL,
             'ident'         => 'test_ident',
             'exdata'        => [1, 2, 'string'],
         ];
 
-        $this->test_base_data =
+        $this->testBaseData =
         [
             'message'       => 'test message',
             'code'          => 11223344,
             'previous'      => new \Exception('previous message', 123),
         ];
 
-        $this->BaseException = new \IfCastle\Exceptions\BaseException(\array_merge($this->test_data, $this->test_base_data));
+        $this->BaseException = new \IfCastle\Exceptions\BaseException(\array_merge($this->testData, $this->testBaseData));
     }
 
     /**
@@ -87,23 +87,23 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10, $e->getCode(), '$e->getCode() failed');
         $this->assertTrue(($previous === $e->getPrevious()), '$e->getPrevious() failed');
 
-        $e = new \IfCastle\Exceptions\BaseException($this->test_base_data);
-        $this->assertEquals($this->test_base_data['message'], $e->getMessage(), '$e->getMessage() failed');
-        $this->assertEquals($this->test_base_data['code'], $e->getCode(), '$e->getCode() failed');
-        $this->assertTrue(($this->test_base_data['previous'] === $e->getPrevious()), '$e->getPrevious() failed');
+        $e = new \IfCastle\Exceptions\BaseException($this->testBaseData);
+        $this->assertEquals($this->testBaseData['message'], $e->getMessage(), '$e->getMessage() failed');
+        $this->assertEquals($this->testBaseData['code'], $e->getCode(), '$e->getCode() failed');
+        $this->assertTrue(($this->testBaseData['previous'] === $e->getPrevious()), '$e->getPrevious() failed');
 
-        $e = new \IfCastle\Exceptions\BaseException(\array_merge($this->test_data, $this->test_base_data));
-        $this->assertEquals($this->test_base_data['message'], $e->getMessage(), '$e->getMessage() failed');
-        $this->assertEquals($this->test_base_data['code'], $e->getCode(), '$e->getCode() failed');
-        $this->assertTrue(($this->test_base_data['previous'] === $e->getPrevious()), '$e->getPrevious() failed');
+        $e = new \IfCastle\Exceptions\BaseException(\array_merge($this->testData, $this->testBaseData));
+        $this->assertEquals($this->testBaseData['message'], $e->getMessage(), '$e->getMessage() failed');
+        $this->assertEquals($this->testBaseData['code'], $e->getCode(), '$e->getCode() failed');
+        $this->assertTrue(($this->testBaseData['previous'] === $e->getPrevious()), '$e->getPrevious() failed');
     }
 
     public function testConstructAsContainer(): void
     {
-        // 1. Случай контейнер для исключения \Exception
+        // 1. Container for \Exception
         $exception = new \UnderflowException(
-            $this->test_base_data['message'],
-            $this->test_base_data['code']
+            $this->testBaseData['message'],
+            $this->testBaseData['code']
         );
 
         $e = new \IfCastle\Exceptions\BaseException($exception);
@@ -115,7 +115,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(($exception === $e->getPrevious()), '$e->getPrevious() failed');
         $this->assertTrue(($exception === $e->getPreviousException()), '$e->get_previous() failed');
 
-        // 2. Случай контейнер для BaseExceptionI
+        // 2. Container for BaseExceptionI
         $exception = new \IfCastle\Exceptions\ClassNotExist('my_class');
 
         $e = new \IfCastle\Exceptions\BaseException($exception);
@@ -150,7 +150,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
     public function testGetLevel(): void
     {
         $this->assertEquals(
-            $this->test_data['level'],
+            $this->testData['level'],
             $this->BaseException->getLevel(),
             'BaseException level must be BaseExceptionI::CRITICAL'
         );
@@ -169,7 +169,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
 
         $this->assertIsArray($data, 'data must be array');
 
-        foreach ($this->test_data as $key => $value) {
+        foreach ($this->testData as $key => $value) {
             $this->assertArrayHasKey($key, $data);
             $this->assertEquals($value, $data[$key]);
             unset($data[$key]);
@@ -186,10 +186,10 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         [
             'type'      => \IfCastle\Exceptions\BaseException::class,
             'source'    => ['source' => static::class, 'type' => '->', 'function' => 'setUp'],
-            'message'   => $this->test_base_data['message'],
+            'message'   => $this->testBaseData['message'],
             'template'  => '',
             'tags'      => [],
-            'code'      => $this->test_base_data['code'],
+            'code'      => $this->testBaseData['code'],
             'data'      => '',
         ];
 
@@ -199,7 +199,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
             $this->assertArrayHasKey($main_key, $data);
 
             if ('data' === $main_key) {
-                foreach ($this->test_data as $key => $value) {
+                foreach ($this->testData as $key => $value) {
                     $this->assertArrayHasKey($key, $data['data']);
                     $this->assertEquals($value, $data['data'][$key]);
                 }

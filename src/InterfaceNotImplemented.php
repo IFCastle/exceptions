@@ -14,7 +14,7 @@ class InterfaceNotImplemented       extends LoggableException
     /**
      * Constructor for InterfaceNotImplemented.
      *
-     * @param       string|array|object     $class         Class name
+     * @param       string|array<string, scalar[]>|object     $class         Class name
      * @param       string                  $interface     Required interface
      */
     public function __construct(object|array|string $class, string $interface)

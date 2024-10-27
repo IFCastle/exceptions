@@ -14,7 +14,7 @@ class ClassNotExist extends LoggableException
     /**
      * ClassNotExist.
      *
-     * @param string|array          $class Class name
+     * @param string|array<string, scalar|scalar[]>          $class Class name
      */
     public function __construct(array|string $class)
     {

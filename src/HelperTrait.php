@@ -8,8 +8,7 @@ trait HelperTrait
 {
     /**
      * The method defines the source of the exception.
-     *
-     *
+     * @return array<string, scalar>|string
      */
     final protected function getSourceFor(\Throwable $e, bool $isString = false): array|string
     {
@@ -18,21 +17,21 @@ trait HelperTrait
         if ($isString) {
             return  ($res['class'] ?? $res['file'] . ':' . $res['line']) .
                     ($res['type'] ?? '.') .
-                    ($res['function'] ?? '{}');
+                    ($res['function'] ?? '{}'); // @phpstan-ignore-line
         }
 
         return
         [
             'source'            => $res['class'] ?? $res['file'] . ':' . $res['line'],
             'type'              => $res['type'] ?? '.',
-            'function'          => $res['function'] ?? '{}',
+            'function'          => $res['function'] ?? '{}' // @phpstan-ignore-line
         ];
     }
 
     /**
      * The method returns a type of $value or class name.
      *
-     * It must use in order to exclude objects from the exception.
+     * It must be used to exclude objects from the exception.
      *
      * @param           mixed           $value      value
      */
@@ -70,6 +69,7 @@ trait HelperTrait
         if (\is_resource($value)) {
             $type           = \get_resource_type($value);
             $meta           = '';
+            // @phpstan-ignore-next-line
             if ($type === 'stream' && \is_array($meta = \stream_get_meta_data($value))) {
                 // array keys normalize
                 $meta       = \array_merge(
@@ -91,8 +91,8 @@ trait HelperTrait
      * The method convert $value to string.
      *
      * @param       mixed   $value    Value
-     * @param       boolean $isQuoted If result has been quoted?
-     * @param       int     $arrayMax Max count items of array
+     * @param       boolean $isQuoted If a result has been quoted?
+     * @param       int     $arrayMax Max count items of an array
      */
     protected function toString(mixed $value, bool $isQuoted = false, int $arrayMax = 5): string
     {

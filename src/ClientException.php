@@ -9,6 +9,11 @@ namespace IfCastle\Exceptions;
  */
 class ClientException extends BaseException implements ClientAvailableInterface
 {
+    /**
+     * @param string $template
+     * @param array<string, scalar|scalar[]>  $parameters
+     * @param array<string, scalar|scalar[]>  $debugData
+     */
     public function __construct(string $template, array $parameters = [], array $debugData = [])
     {
         parent::__construct(['template' => $template] + $parameters);

@@ -14,7 +14,7 @@ class MethodNotCallable extends LogicalException
     /**
      * MethodNotCallable.
      *
-     * @param   string|array        $method  Method
+     * @param   string|array<string, scalar|scalar[]>        $method  Method
      * @param   string              $message Extended Message
      */
     public function __construct(array|string $method, $message = '')

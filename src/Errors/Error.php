@@ -8,13 +8,15 @@ use IfCastle\Exceptions\BaseExceptionInterface;
 
 /**
  * The class for encapsulating of PHP Errors
- * as object BaseExceptionI.
+ * as object BaseExceptionInterface.
  */
-class Error implements BaseExceptionInterface
+class Error extends \ErrorException implements BaseExceptionInterface
 {
+    
     /**
-  * Conformity between PHP-errors and BaseExceptionI.
-  */
+     * Conformity between PHP-errors and BaseException
+     * @var array<int, int>
+    */
     protected static array $ERRORS =
         [
             E_ERROR              => self::ERROR,
@@ -33,7 +35,10 @@ class Error implements BaseExceptionInterface
             E_DEPRECATED         => self::INFO,
             E_USER_DEPRECATED    => self::INFO,
         ];
-
+    
+    /**
+     * @var mixed[]|null
+     */
     protected ?array $trace = null;
 
     /**
@@ -45,8 +50,13 @@ class Error implements BaseExceptionInterface
      * Fatal error flag.
      */
     protected bool $isFatal         = false;
-
-    public static function createFromLastError(?array $error = null): ?static
+    
+    /**
+     * @param array<string, scalar>|null $error
+     *
+     * @return BaseExceptionInterface|null
+     */
+    public static function createFromLastError(?array $error = null): ?BaseExceptionInterface
     {
         if ($error === null) {
             return null;
@@ -65,9 +75,9 @@ class Error implements BaseExceptionInterface
      * @param        string $file    File
      * @param        int    $line    Line
      *
-     * @return       Error
+     * @return       BaseExceptionInterface
     */
-    public static function createError(int $code, string $message, string $file, int $line): static
+    public static function createError(int $code, string $message, string $file, int $line): BaseExceptionInterface
     {
         if (!\array_key_exists($code, self::$ERRORS)) {
             $code                   = self::ERROR;
@@ -107,64 +117,24 @@ class Error implements BaseExceptionInterface
                 }
         }
     }
-
-    /**
-     * Errors constructor.
-    */
-    public function __construct(protected int $code, protected string $message, protected string $file, protected int $line) {}
-
-    #[\Override]
-    public function getMessage(): string
+    
+    public function __construct(int        $severity = \E_ERROR,
+                                string     $message = '',
+                                ?string    $filename = null,
+                                ?int       $line = null,
+                                int        $code = 0,
+                                ?\Throwable $previous = null
+    )
     {
-        return $this->message;
+        parent::__construct($message, $code, $severity, $filename, $line, $previous);
     }
-
-    #[\Override]
-    public function getPrevious(): null
-    {
-        return null;
-    }
-
+    
     #[\Override]
     public function getTags(): array
     {
         return [];
     }
-
-    #[\Override]
-    public function getCode(): int
-    {
-        return $this->code;
-    }
-
-    #[\Override]
-    public function getFile(): string
-    {
-        return $this->file;
-    }
-
-    #[\Override]
-    public function getLine(): int
-    {
-        return $this->line;
-    }
-
-    #[\Override]
-    public function getTrace(): ?array
-    {
-        return $this->trace;
-    }
-
-    #[\Override]
-    public function getTraceAsString(): string
-    {
-        if (empty($this->trace)) {
-            return '';
-        }
-
-        return \print_r($this->trace, true);
-    }
-
+    
     #[\Override]
     public function isLoggable(): bool
     {
@@ -211,7 +181,10 @@ class Error implements BaseExceptionInterface
 
         return self::$ERRORS[$this->code];
     }
-
+    
+    /**
+     * @return array{source: string, type: string, function: string}
+     */
     #[\Override]
     public function getSource(): array
     {

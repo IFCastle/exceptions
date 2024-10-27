@@ -42,6 +42,12 @@ class BaseException extends \Exception implements BaseExceptionInterface
     use HelperTrait;
     use ArraySerializerTrait;
     use TemplateHandlerTrait;
+    
+    /**
+     * @param \Throwable|BaseExceptionInterface|null $throwable
+     *
+     * @return array<string, scalar|array<string, scalar[]>>
+     */
     public static function serializeToArray(\Throwable|BaseExceptionInterface|null $throwable = null): array
     {
         if ($throwable instanceof BaseExceptionInterface) {
@@ -59,6 +65,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
 
     /**
      * Layout of the default properties.
+     * @var array<string, scalar>
      */
     protected static array $baseProps = ['message' => '', 'code' => 0, 'previous' => null, 'template' => '', 'tags' => []];
 
@@ -69,6 +76,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
 
     /**
      * Extra data to exception.
+     * @var array<string, scalar|object|array<string, scalar|object>>
      */
     protected array $data           = [];
 
@@ -80,11 +88,13 @@ class BaseException extends \Exception implements BaseExceptionInterface
 
     /**
      * Source of error.
+     * @var array<string, string>
      */
     protected ?array $source        = null;
 
     /**
      * Debug data.
+     * @var array<string, scalar|array<string, scalar>>
      */
     protected array $debugData      = [];
 
@@ -127,7 +137,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
      *    In this case, exception acts as container,
      *    and inherits data from the $exception
      *
-     * @param BaseExceptionInterface|\Throwable|array|string $exception Exception data
+     * @param BaseExceptionInterface|\Throwable|array<string, scalar|array<string, scalar>|scalar[]>|string $exception Exception data
      * @param int                                            $code      Code
      * @param \Throwable|null                                $previous  Previous or aggregate exception
      */
@@ -421,6 +431,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
      * Returns information about a value type.
      *
      * @param   mixed           $value      Value
+     * @return  string|array<string, scalar|mixed[]>
      */
     protected function typeInfo(mixed $value): string|array
     {
@@ -442,7 +453,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
     /**
      * The method saved debug data if debug mode is active.
      *
-     * @param       array       $data           debug data
+     * @param       array<string, scalar|mixed[]>       $data           debug data
      * @return      $this
      */
     protected function setDebugData(array $data): static

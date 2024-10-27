@@ -7,7 +7,7 @@ namespace IfCastle\Exceptions;
 /**
  * Main interface for BaseException.
  */
-interface BaseExceptionInterface extends \Stringable
+interface BaseExceptionInterface extends \Throwable
 {
     /**
      * The System is unusable.
@@ -64,19 +64,19 @@ interface BaseExceptionInterface extends \Stringable
      */
     final public const int RESULT = 1;
 
-    public function getMessage();
+    public function getMessage(): string;
 
-    public function getPrevious();
+    public function getPrevious(): ?\Throwable;
 
     public function getCode();
 
-    public function getFile();
+    public function getFile(): string;
 
-    public function getLine();
+    public function getLine(): int;
 
-    public function getTrace();
+    public function getTrace(): array;
 
-    public function getTraceAsString();
+    public function getTraceAsString(): string;
 
     /**
      * Template message.
@@ -142,6 +142,8 @@ interface BaseExceptionInterface extends \Stringable
      * ]
      *
      * Attention to the order of elements in the array is important!
+     *
+     * @return  array<string, scalar>|null
      */
     public function getSource(): ?array;
 
@@ -159,21 +161,27 @@ interface BaseExceptionInterface extends \Stringable
 
     /**
      * The method returns extra data for exception.
+     *
+     * @return  array<string, scalar|scalar[]>
      */
     public function getExceptionData(): array;
 
     /**
-     * @param       array       $data   The additional data
+     * @param       array<string, scalar|scalar[]|mixed>       $data   The additional data
      */
     public function appendData(array $data): static;
 
     /**
      * The method returns debug data for exception.
+     *
+     * @return  array<string, scalar|scalar[]|mixed>
      */
     public function getDebugData(): array;
 
     /**
      * The method serialized object to an array.
+     *
+     * @return  array<string, scalar|scalar[]>
      */
     public function toArray(): array;
 }

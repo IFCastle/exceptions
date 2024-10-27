@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace IfCastle\Exceptions;
 
+use PHPUnit\Event\Code\Throwable;
+
 trait ArraySerializerTrait
 {
     /**
      * The method defines the source of the exception.
-     *
-     *
+     * @return array<string, scalar>|string
      */
     abstract protected function getSourceFor(\Throwable $e, bool $isString = false): array|string;
 
     /**
      * The method serialized errors BaseExceptionI to an array.
      *
-     * @param 			array|BaseExceptionInterface $errors array of errors
+     * @param 			BaseExceptionInterface[]|\Throwable[]|BaseExceptionInterface $errors array of errors
+     * @return          array<mixed|mixed[]>
      */
     protected function errorsToArray(mixed $errors): array
     {
@@ -48,7 +50,7 @@ trait ArraySerializerTrait
     /**
      * The method deserialized array of array to array of errors.
      *
-     * @param 			array 						$array      array of array
+     * @param 			array<scalar[]|array<scalar>> $array      array of array
      * @param           string                      $class      class for exception
      *
      * @return          BaseException[]

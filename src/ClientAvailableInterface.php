@@ -15,6 +15,8 @@ interface ClientAvailableInterface
 
     /**
      * Serialize exception for client.
+     *
+     * @return array<string, scalar|scalar[]>
      */
     public function clientSerialize(): array;
 }

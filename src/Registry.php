@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace IfCastle\Exceptions;
 
+use PHPUnit\Event\Code\Throwable;
+
 /**
  * Register of exceptions.
  *
@@ -23,20 +25,20 @@ class Registry
     
     /**
      * Options for logger.
-     * @var array|\ArrayAccess
+     * @var array<string, scalar|scalar[]>
      */
     public static array $LoggerOptions = [];
 
     /**
      * Options for debug mode.
-     * @var array|\ArrayAccess
+     * @var array<string, scalar|scalar[]>
      */
     public static array $DebugOptions  = [];
 
     /**
      * List of exception.
      *
-     * @var BaseException[]|\Exception[]|StorageInterface
+     * @var BaseExceptionInterface[]|\Throwable[]|StorageInterface
      */
     protected static array|StorageInterface $exceptions = [];
 
@@ -57,15 +59,15 @@ class Registry
 
     /**
      * Old error handler.
-     * @var callback
+     * @var ?callable(int $code, string $message, string $file, int|string $line): bool
      */
-    protected static $oldErrorHandler;
+    protected static mixed $oldErrorHandler = null;
 
     /**
      * Old exception handler.
-     * @var callback
+     * @var callable(\Throwable): void
      */
-    protected static $oldExceptionHandler;
+    protected static mixed $oldExceptionHandler = null;
 
     /**
      * Setup global handler flag.
@@ -74,6 +76,7 @@ class Registry
 
     /**
      * List of fatal php error.
+     * @var int[]
      */
     protected static array $FATAL = [\E_ERROR, \E_PARSE, \E_CORE_ERROR, \E_COMPILE_ERROR];
 
@@ -89,7 +92,7 @@ class Registry
      */
     public static function registerException(mixed $exception): void
     {
-        if (!$exception instanceof \Throwable && !$exception instanceof BaseExceptionInterface) {
+        if (false === $exception instanceof \Throwable) {
             return;
         }
 
@@ -103,28 +106,15 @@ class Registry
     /**
      * Returns the list of exception.
      *
-     * @return      BaseException[]|\Exception[]
+     * @return      BaseException[]|\Throwable[]
      */
     public static function getExceptionLog(): array
     {
         if (\is_array(self::$exceptions)) {
             return self::$exceptions;
+        } else {
+            return self::$exceptions->getStorageExceptions();
         }
-
-        if (self::$exceptions instanceof StorageInterface) {
-
-            $result = self::$exceptions->getStorageExceptions();
-            
-            if (!\is_array($result)) {
-                return [new \UnexpectedValueException('StorageI->get_storage() return not array')];
-            }
-
-            return $result;
-        }
-
-
-        return [];
-
     }
 
     /**
@@ -217,15 +207,11 @@ class Registry
 
     /**
      * Return list of logger options.
+     * @return      array<string, scalar|scalar[]>
      */
     public static function getLoggerOptions(): array
     {
-        if (\is_array(self::$LoggerOptions) ||
-        self::$LoggerOptions instanceof \ArrayAccess) {
-            return self::$LoggerOptions;
-        }
-
-        return [];
+        return self::$LoggerOptions;
     }
 
     /**
@@ -260,13 +246,13 @@ class Registry
 
         self::$installGlobalHandlers  = false;
 
-        if (!empty(self::$oldErrorHandler)) {
+        if (self::$oldErrorHandler !== null) {
             \set_error_handler(self::$oldErrorHandler);
         } else {
             \restore_error_handler();
         }
 
-        if (!empty(self::$oldExceptionHandler)) {
+        if (self::$oldExceptionHandler !== null) {
             \set_exception_handler(self::$oldExceptionHandler);
         } else {
             \restore_exception_handler();

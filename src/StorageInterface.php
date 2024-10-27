@@ -13,12 +13,13 @@ interface StorageInterface
     /**
      * Add exception into storage.
      *
-     * @param       BaseExceptionInterface|\Exception $exception Exception
+     * @param       BaseExceptionInterface|\Throwable $exception Exception
      */
     public function addException(BaseExceptionInterface|\Throwable $exception): static;
 
     /**
      * Returns list of exceptions.
+     * @return      BaseException[]|\Throwable[]
      */
     public function getStorageExceptions(): array;
 

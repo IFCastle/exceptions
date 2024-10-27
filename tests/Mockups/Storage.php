@@ -9,13 +9,15 @@ use IfCastle\Exceptions\StorageInterface;
 
 class Storage implements StorageInterface
 {
+    /**
+     * List of exceptions.
+     *
+     * @var BaseExceptionInterface[]|\Throwable[]
+     */
     public array $Exceptions = [];
 
     /**
-     *
-     *
-     *
-     * @return      StorageInterface
+     * @return      $this
      */
     #[\Override]
     public function addException(BaseExceptionInterface|\Throwable $exception): static

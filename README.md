@@ -1,4 +1,5 @@
-BaseException [![PHP Composer](https://github.com/EdmondDantes/amphp-pool/actions/workflows/php.yml/badge.svg)](https://github.com/EdmondDantes/BaseException/actions/workflows/php.yml)
+BaseException [![PHP Composer](https://github.com/EdmondDantes/amphp-pool/actions/workflows/php.yml/badge.svg)](https://github.com/EdmondDantes/BaseException/actions/workflows/php.yml) [![codecov](https://codecov.io/gh/EdmondDantes/BaseException/branch/master/graph/badge.svg)](https://codecov.io/gh/EdmondDantes/BaseException)
+
 =============
 
 Base Exception Library for PHP 8.2+

@@ -285,10 +285,10 @@ class Registry
      *
      *
      */
-    public static function errorHandler(int $code, string $message, string $file, int|string $line): bool
+    public static function errorHandler(int $severity, string $message, string $file, int|string $line): bool
     {
         self::registerException(
-            Errors\Error::createError($code, $message, $file, (int) $line)
+            Errors\Error::createError($severity, $message, $file, (int) $line)
         );
 
         /* Don't execute PHP internal error handler */

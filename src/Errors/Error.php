@@ -70,50 +70,50 @@ class Error extends \ErrorException implements BaseExceptionInterface
     /**
      * Errors factory.
      *
-     * @param        int    $code    Class of error
-     * @param        string $message Message
-     * @param        string $file    File
-     * @param        int    $line    Line
+     * @param        int    $severity Class of error
+     * @param        string $message  Message
+     * @param        string $file     File
+     * @param        int    $line     Line
      *
      * @return       BaseExceptionInterface
     */
-    public static function createError(int $code, string $message, string $file, int $line): BaseExceptionInterface
+    public static function createError(int $severity, string $message, string $file, int $line): BaseExceptionInterface
     {
-        if (!\array_key_exists($code, self::$ERRORS)) {
-            $code                   = self::ERROR;
+        if (!\array_key_exists($severity, self::$ERRORS)) {
+            $severity               = self::ERROR;
         }
 
-        if (\in_array($code, [E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE])) {
-            return new UserError($code, $message, $file, $line);
+        if (\in_array($severity, [E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE])) {
+            return new UserError($severity, $message, $file, $line);
         }
 
-        switch (self::$ERRORS[$code]) {
+        switch (self::$ERRORS[$severity]) {
             case self::EMERGENCY    :
                 {
                     //
                     // EMERGENCY created as fatal error
                     //
-                    $err = new Error($code, $message, $file, $line);
+                    $err = new Error($severity, $message, $file, $line);
                     $err->markAsFatal();
 
                     return $err;
                 }
             case self::WARNING  :
                 {
-                    return new Warning($code, $message, $file, $line);
+                    return new Warning($severity, $message, $file, $line);
                 }
             case self::NOTICE   :
             case self::INFO     :
             case self::DEBUG    :
                 {
-                    return new Notice($code, $message, $file, $line);
+                    return new Notice($severity, $message, $file, $line);
                 }
             case self::ALERT    :
             case self::CRITICAL :
             case self::ERROR    :
             default:
                 {
-                    return new Error($code, $message, $file, $line);
+                    return new Error($severity, $message, $file, $line);
                 }
         }
     }
@@ -175,11 +175,11 @@ class Error extends \ErrorException implements BaseExceptionInterface
     #[\Override]
     public function getLevel(): int
     {
-        if (!\array_key_exists($this->code, self::$ERRORS)) {
+        if (!\array_key_exists($this->getSeverity(), self::$ERRORS)) {
             return self::ERROR;
         }
 
-        return self::$ERRORS[$this->code];
+        return self::$ERRORS[$this->getSeverity()];
     }
     
     /**

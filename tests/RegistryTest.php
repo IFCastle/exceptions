@@ -298,16 +298,16 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(\count($exceptions) === \count($errors), '$exceptions count must equal $errors');
 
         foreach ($exceptions as $error) {
-            [$code, $level]     = [\key($errors), \current($errors)];
+            [$severity, $level]     = [\key($errors), \current($errors)];
             \next($errors);
 
             $this->assertInstanceOf(BaseExceptionInterface::class, $error);
             $this->assertInstanceOf(Error::class, $error);
-            $this->assertEquals($code, $error->getCode(), '$error->getCode() failed');
+            $this->assertEquals($severity, $error->getSeverity(), '$error->getSeverity() failed');
             $this->assertEquals(
                 $level,
                 $error->getLevel(),
-                '$error->get_level() failed (line: ' . $error->getLine() . ')'
+                '$error->getLevel() failed (line: ' . $error->getLine() . ')'
             );
             $this->assertInstanceOf(
                 'IfCastle\Exceptions\Errors\\' . $error->getMessage(),

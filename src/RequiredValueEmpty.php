@@ -14,7 +14,7 @@ class RequiredValueEmpty extends LoggableException
     /**
      * If required value is empty.
      *
-     * @param string|array $name                        Variable name
+     * @param string|array<string|scalar|scalar[]> $name Variable name
      *                                                  or array with parameters.
      * @param string|null  $expected                    Excepted type
      */

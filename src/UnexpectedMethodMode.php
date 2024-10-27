@@ -14,7 +14,7 @@ class UnexpectedMethodMode extends LoggableException
     /**
      * The method does not support this mode of work.
      *
-     * @param string|array    $method               The method name
+     * @param string|mixed[] $method               The method name
      *                                              or list of parameters for exception
      *                                              or another exception for container
      * @param string|null     $mode                 Name of mode

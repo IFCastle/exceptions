@@ -14,7 +14,7 @@ class SerializeException extends LoggableException
     /**
      * Object can't be serialized!
      *
-     * @param       string|array $reason    Reason of error
+     * @param       string|array<string, scalar|scalar[]> $reason    Reason of error
      * @param       object       $object    The object which must have been serialized
      * @param       string       $type      Type of serializing
      * @param       object       $srcObject The object where started the process
@@ -27,11 +27,11 @@ class SerializeException extends LoggableException
         }
 
         parent::__construct([
-                                'message'       => 'Serialize Failed',
-                                'reason'        => $reason,
-                                'type'          => $type,
-                                'object'        => $this->typeInfo($object),
-                                'srcObject'     => $this->typeInfo($srcObject),
+            'message'       => 'Serialize Failed',
+            'reason'        => $reason,
+            'type'          => $type,
+            'object'        => $this->typeInfo($object),
+            'srcObject'     => $this->typeInfo($srcObject),
         ]);
     }
 }

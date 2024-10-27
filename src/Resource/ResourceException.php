@@ -19,7 +19,7 @@ class ResourceException extends SystemException
     protected string $system    = 'undefined';
 
     /**
-     * @param       string|object|resource|array $resource
+     * @param       string|object|resource|array<string, scalar|scalar[]> $resource
      * @param       string              $operation
      * @param       string              $type
      */

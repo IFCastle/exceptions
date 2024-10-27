@@ -17,7 +17,7 @@ trait TemplateHandlerTrait
      * Handles the template message.
      *
      * @param   string              $template       Template
-     * @param   array               $data           Extended data
+     * @param   mixed[]             $data           Extended data
      * @param   string              $message        Message of exception
      * @param   int                 $code           Code
      * @param   ?\Throwable         $previous       Previous Exception

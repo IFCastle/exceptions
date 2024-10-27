@@ -40,5 +40,8 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: Run PHPStan
+      run: composer run-script analysis
+
     - name: Run test suite
       run: composer run-script test

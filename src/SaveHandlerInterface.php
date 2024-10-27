@@ -7,9 +7,10 @@ namespace IfCastle\Exceptions;
 interface SaveHandlerInterface
 {
     /**
-     * Save handler method.
-     *
-     *
+     * @param array<\Throwable> $exceptions
+     * @param callable $resetLog
+     * @param array<string, mixed> $loggerOptions
+     * @param array<string, mixed> $debugOptions
      */
     public function saveExceptions(array $exceptions, callable $resetLog, array $loggerOptions = [], array $debugOptions = []): void;
 }

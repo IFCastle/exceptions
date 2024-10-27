@@ -30,6 +30,7 @@
         "phpstan/phpstan": "^1.12"
     },
     "scripts": {
-        "test": "vendor/bin/phpunit ./tests"
+        "test": "vendor/bin/phpunit ./tests",
+        "analysis": "phpstan"
     }
 }

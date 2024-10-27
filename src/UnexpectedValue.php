@@ -14,7 +14,7 @@ class UnexpectedValue extends LoggableException
     /**
      * The variable has an unexpected value!
      *
-     * @param string|array $name                        Variable name
+     * @param string|mixed[] $name                        Variable name
      *                                                  or list of parameters for exception
      * @param mixed        $value                       Value
      * @param string|class-string|null  $rules          Rules description

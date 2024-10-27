@@ -14,7 +14,7 @@ class UnexpectedValueType extends LoggableException
     /**
      * Value of variable has unexpected type.
      *
-     * @param string|array $name                        Variable name
+     * @param string|mixed[] $name                      Variable name
      *                                                  or list of parameters for exception
      * @param mixed        $value                       Value
      * @param string|class-string|null  $expected       Excepted type

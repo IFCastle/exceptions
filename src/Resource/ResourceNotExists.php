@@ -8,7 +8,11 @@ class ResourceNotExists extends ResourceException
 {
     protected string $template = '{system} error: {type} is not exist. Resource: {resource}, Operation: {operation}';
 
-    public function __construct($resource, $type = 'resource')
+    /**
+     * @param string|object|resource|array<string, scalar|scalar[]> $resource
+     * @param string $type
+     */
+    public function __construct(mixed $resource, string $type = 'resource')
     {
         parent::__construct([
             'resource'  => $resource,

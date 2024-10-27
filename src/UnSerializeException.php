@@ -14,9 +14,9 @@ class UnSerializeException extends LoggableException
     /**
      * Object can't be serialized!
      *
-     * @param       string|array        $reason         Reason of error
+     * @param       string|mixed[]      $reason         Reason of error
      * @param       string              $type           Type of serialize
-     * @param       mixed               $node           The node which must have been serialized
+     * @param       string|null         $node           The node which must have been serialized
      */
     public function __construct(array|string $reason, string $type = 'phpserialize', string|null $node = null)
     {

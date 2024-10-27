@@ -8,10 +8,16 @@ class ResourceDataWrong extends ResourceException
 {
     protected string $template = '{system} error: data is wrong (expected {format}) for resource {resource}';
 
-    public function __construct($resource, $type = 'resource', $format = 'format')
+    /**
+     * @param string|object|resource|array<string, scalar|scalar[]> $resource
+     * @param string $type
+     * @param string $format
+     */
+    public function __construct(mixed $resource, string $type = 'resource', string $format = 'format')
     {
         parent::__construct([
             'resource'  => $resource,
+            'type'      => $type,
             'operation' => 'format:' . $format,
             'format'    => $format,
             'system'    => $this->system,

@@ -9,4 +9,3 @@ parameters:
 		#- identifier: instanceof.alwaysFalse
 		- identifier: identical.alwaysFalse
 		# - '#Strict comparison using === between true and false will always evaluate to false#'
-		- '#Result of && is always false#'

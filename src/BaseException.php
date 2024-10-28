@@ -200,14 +200,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
         }
 
         // parent construct
-        if ($previous instanceof BaseExceptionInterface
-        && ($previous instanceof \Throwable) === false) {
-            parent::__construct($message, $code);
-
-            $this->data['previous'] = $previous;
-        } else {
-            parent::__construct($message, $code, $previous);
-        }
+        parent::__construct($message, $code, $previous);
 
         // The container is never in the journal
         if (Registry::$isActive && $this->isLoggable && $this->isContainer === false) {

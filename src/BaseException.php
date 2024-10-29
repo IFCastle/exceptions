@@ -130,18 +130,18 @@ class BaseException extends \Exception implements BaseExceptionInterface
      *    Key of an array: message, code, previous
      *    overridden the parameters $code and $previous,
      *    and other data is saved to the property `$data`.
-     * 3. $exception - BaseExceptionI
+     * 3. $exception - BaseExceptionInterface
      *    In this case, exception acts as container,
      *    but it does not inherit data from the $exception.
      * 4. $exception - \Throwable -
      *    In this case, exception acts as container,
      *    and inherits data from the $exception
      *
-     * @param BaseExceptionInterface|\Throwable|array<string, scalar|array<string, scalar>|scalar[]>|string $exception Exception data
+     * @param \Throwable|array<string, scalar|null|array<string, scalar>|scalar[]>|string $exception Exception data
      * @param int                                            $code      Code
      * @param \Throwable|null                                $previous  Previous or aggregate exception
      */
-    public function __construct(BaseExceptionInterface|\Throwable|array|string $exception, int $code = 0, ?\Throwable $previous = null)
+    public function __construct(\Throwable|array|string $exception, int $code = 0, ?\Throwable $previous = null)
     {
         $template               = '';
         $message                = '';

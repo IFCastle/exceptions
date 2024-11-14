@@ -11,6 +11,6 @@ class FileNotExistsTest extends TestCase
     public function test(): void
     {
         $exception = new FileNotExists('file.txt');
-        $this->assertEquals("'FileSystem' error: 'file' is not exist. Resource: 'STRING', Operation: 'is_file'", $exception->getMessage());
+        $this->assertEquals("'FileSystem' error: 'file' is not exist. Resource: 'file.txt', Operation: 'is_file'", $exception->getMessage());
     }
 }

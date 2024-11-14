@@ -36,7 +36,6 @@ class ResourceException extends SystemException
             }
 
             parent::__construct([
-                'message'   => $this->resourceSystem() . ' error: operation "' . $operation . '" failed',
                 'resource'  => $resource,
                 'operation' => $operation,
                 'type'      => $type,

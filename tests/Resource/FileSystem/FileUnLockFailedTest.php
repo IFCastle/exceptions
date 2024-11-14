@@ -16,8 +16,7 @@ class FileUnLockFailedTest extends TestCase
             'resource' => 'file',
             'type' => 'string',
             'operation' => 'unlock',
-            'system' => 'FileSystem',
-            'message' => 'FileSystem error: operation "unlock" failed',
+            'system' => 'FileSystem'
         ], $exception->getExceptionData());
     }
 }

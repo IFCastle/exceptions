@@ -12,6 +12,6 @@ class FileNotReadableTest extends TestCase
     {
         $exception = new FileNotReadable('file.txt', 'file');
         
-        $this->assertEquals("'FileSystem' error: operation 'readable' for the resource 'file.txt' ('file') is failed. FileSystem error: operation \"readable\" failed", $exception->getMessage());
+        $this->assertEquals("'FileSystem' error: operation 'readable' for the resource 'file.txt' ('file') is failed", $exception->getMessage());
     }
 }

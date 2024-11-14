@@ -74,7 +74,7 @@ class Error extends \ErrorException implements BaseExceptionInterface
      * @param        int    $line     Line
      *
     */
-    public static function createError(int $severity, string $message, string $file, int $line): BaseExceptionInterface
+    public static function createError(int $severity, string $message, string $file, int $line): Error
     {
         if (!\array_key_exists($severity, self::$ERRORS)) {
             $severity               = self::ERROR;

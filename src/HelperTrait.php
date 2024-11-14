@@ -10,7 +10,7 @@ trait HelperTrait
      * The method defines the source of the exception.
      * @return array<string, scalar>|string
      */
-    final protected function getSourceFor(\Throwable $e, bool $isString = false): array|string
+    final protected static function getSourceFor(\Throwable $e, bool $isString = false): array|string
     {
         $res                    = $e->getTrace()[0];
 

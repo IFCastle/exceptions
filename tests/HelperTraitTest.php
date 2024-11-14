@@ -21,7 +21,7 @@ class HelperTraitTest extends \PHPUnit\Framework\TestCase
     {
         $testedObject           = new TestedClass();
 
-        $result                 = $testedObject->_getSourceFor(new \Exception('this'));
+        $result                 = $testedObject::_getSourceFor(new \Exception('this'));
 
         $this->assertEquals(
             [

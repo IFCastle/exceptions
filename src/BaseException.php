@@ -40,16 +40,31 @@ namespace IfCastle\Exceptions;
 class BaseException extends \Exception implements BaseExceptionInterface
 {
     use HelperTrait;
-    use ArraySerializerTrait;
     use TemplateHandlerTrait;
     
     /**
      * @param \Throwable|null $throwable
+     * @param int             $recursion
      *
-     * @return array<string, scalar|array<string, scalar[]>>
+     * @return array<string, scalar|array<string, scalar[]>>|null
      */
-    public static function serializeToArray(\Throwable|null $throwable = null): array
+    public static function serializeToArray(\Throwable|null $throwable = null, int $recursion = 0): array|null
     {
+        if($throwable === null) {
+            return null;
+        }
+        
+        if ($recursion > 8) {
+            return [
+                'message'           => 'Depth of exceptions is greater than 8',
+                'code'              => 0,
+                'source'            => self::getSourceFor($throwable),
+                'file'              => __FILE__,
+                'line'              => __LINE__,
+                'previous'          => null,
+            ];
+        }
+        
         if ($throwable instanceof BaseExceptionInterface) {
             return $throwable->toArray();
         }
@@ -57,8 +72,10 @@ class BaseException extends \Exception implements BaseExceptionInterface
         return [
             'message'           => $throwable->getMessage(),
             'code'              => $throwable->getCode(),
+            'source'            => self::getSourceFor($throwable),
             'file'              => $throwable->getFile(),
-            'line'              => $throwable->getLine()
+            'line'              => $throwable->getLine(),
+            'previous'          => self::serializeToArray($throwable->getPrevious(), $recursion + 1),
         ];
     }
 
@@ -319,7 +336,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
             return $this->source;
         }
 
-        return $this->source    = $this->getSourceFor($this);
+        return $this->source    = self::getSourceFor($this);
     }
 
     /**
@@ -390,12 +407,13 @@ class BaseException extends \Exception implements BaseExceptionInterface
                 $res =
                 [
                     'type'      => $previous::class,
-                    'source'    => $this->getSourceFor($previous),
+                    'source'    => self::getSourceFor($previous),
                     'file'      => $this->getFile(),
                     'line'      => $this->getLine(),
                     'message'   => $previous->getMessage(),
                     'code'      => $previous->getCode(),
                     'data'      => [],
+                    'previous'  => self::serializeToArray($previous->getPrevious()),
                 ];
             }
 
@@ -420,6 +438,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
             'tags'      => $this->getTags(),
             'code'      => $this->getCode(),
             'data'      => $this->getExceptionData(),
+            'previous'  => self::serializeToArray($this->getPrevious())
         ];
     }
 

@@ -19,7 +19,7 @@ class UnhandledException extends LoggableException
     {
         parent::__construct([
             'type'      => $this->typeInfo($exception),
-            'source'    => $this->getSourceFor($exception),
+            'source'    => self::getSourceFor($exception),
             'previous'  => $exception,
         ]);
     }

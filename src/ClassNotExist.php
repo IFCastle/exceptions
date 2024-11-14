@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IfCastle\Exceptions;
 
 /**
- * If class not exists or not loaded with autoload.
+ * If class doesn't exist or not loaded with autoload.
  */
 class ClassNotExist extends LoggableException
 {

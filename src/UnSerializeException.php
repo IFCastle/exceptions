@@ -28,7 +28,7 @@ class UnSerializeException extends LoggableException
         parent::__construct([
             'message'       => $reason,
             'type'          => $type,
-            'node'          => $this->typeInfo($node),
+            'node'          => is_string($node) ? $node : $this->typeInfo($node),
         ]);
     }
 }

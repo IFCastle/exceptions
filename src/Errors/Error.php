@@ -54,7 +54,7 @@ class Error extends \ErrorException implements BaseExceptionInterface
      * @param array<string, scalar>|null $error
      *
      */
-    public static function createFromLastError(?array $error = null): ?BaseExceptionInterface
+    public static function createFromLastError(?array $error = null): ?Error
     {
         if ($error === null) {
             return null;
@@ -212,6 +212,8 @@ class Error extends \ErrorException implements BaseExceptionInterface
         [
             'type'      => static::class,
             'source'    => $this->getSource(),
+            'file'      => $this->getFile(),
+            'line'      => $this->getLine(),
             'message'   => $this->getMessage(),
             'code'      => $this->getCode(),
             'data'      => [],

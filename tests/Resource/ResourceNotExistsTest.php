@@ -12,6 +12,6 @@ class ResourceNotExistsTest extends TestCase
     {
         $exception = new ResourceNotExists('file.txt', 'file');
         
-        $this->assertEquals("'undefined' error: 'file' is not exist. Resource: 'STRING', Operation: 'is_file'", $exception->getMessage());
+        $this->assertEquals("'undefined' error: 'file' is not exist. Resource: 'file.txt', Operation: 'is_file'", $exception->getMessage());
     }
 }

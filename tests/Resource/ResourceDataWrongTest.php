@@ -13,7 +13,7 @@ class ResourceDataWrongTest extends TestCase
         $exception                  = new ResourceDataWrong('resource', 'string', 'string');
         
         $this->assertEquals([
-            'resource' => 'STRING',
+            'resource' => 'resource',
             'type' => 'string',
             'operation' => 'format:string',
             'format' => 'string',

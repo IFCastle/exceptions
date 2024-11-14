@@ -12,9 +12,8 @@ use IfCastle\Exceptions\BaseExceptionInterface;
  */
 class Error extends \ErrorException implements BaseExceptionInterface
 {
-    
     /**
-     * Conformity between PHP-errors and BaseException
+     * Conformity between PHP-errors and BaseException.
      * @var array<int, int>
     */
     protected static array $ERRORS =
@@ -35,7 +34,7 @@ class Error extends \ErrorException implements BaseExceptionInterface
             E_DEPRECATED         => self::INFO,
             E_USER_DEPRECATED    => self::INFO,
         ];
-    
+
     /**
      * @var mixed[]|null
      */
@@ -50,11 +49,10 @@ class Error extends \ErrorException implements BaseExceptionInterface
      * Fatal error flag.
      */
     protected bool $isFatal         = false;
-    
+
     /**
      * @param array<string, scalar>|null $error
      *
-     * @return BaseExceptionInterface|null
      */
     public static function createFromLastError(?array $error = null): ?BaseExceptionInterface
     {
@@ -75,7 +73,6 @@ class Error extends \ErrorException implements BaseExceptionInterface
      * @param        string $file     File
      * @param        int    $line     Line
      *
-     * @return       BaseExceptionInterface
     */
     public static function createError(int $severity, string $message, string $file, int $line): BaseExceptionInterface
     {
@@ -117,24 +114,23 @@ class Error extends \ErrorException implements BaseExceptionInterface
                 }
         }
     }
-    
+
     public function __construct(int        $severity = \E_ERROR,
-                                string     $message = '',
-                                ?string    $filename = null,
-                                ?int       $line = null,
-                                int        $code = 0,
-                                ?\Throwable $previous = null
-    )
-    {
+        string     $message = '',
+        ?string    $filename = null,
+        ?int       $line = null,
+        int        $code = 0,
+        ?\Throwable $previous = null
+    ) {
         parent::__construct($message, $code, $severity, $filename, $line, $previous);
     }
-    
+
     #[\Override]
     public function getTags(): array
     {
         return [];
     }
-    
+
     #[\Override]
     public function isLoggable(): bool
     {
@@ -181,7 +177,7 @@ class Error extends \ErrorException implements BaseExceptionInterface
 
         return self::$ERRORS[$this->getSeverity()];
     }
-    
+
     /**
      * @return array{source: string, type: string, function: string}
      */

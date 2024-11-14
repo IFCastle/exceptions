@@ -41,19 +41,17 @@ class BaseException extends \Exception implements BaseExceptionInterface
 {
     use HelperTrait;
     use TemplateHandlerTrait;
-    
+
     /**
-     * @param \Throwable|null $throwable
-     * @param int             $recursion
      *
      * @return array<string, scalar|array<string, scalar[]>>|null
      */
     public static function serializeToArray(\Throwable|null $throwable = null, int $recursion = 0): array|null
     {
-        if($throwable === null) {
+        if ($throwable === null) {
             return null;
         }
-        
+
         if ($recursion > 8) {
             return [
                 'message'           => 'Depth of exceptions is greater than 8',
@@ -64,7 +62,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
                 'previous'          => null,
             ];
         }
-        
+
         if ($throwable instanceof BaseExceptionInterface) {
             return $throwable->toArray();
         }
@@ -390,7 +388,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
     {
         return $this->debugData;
     }
-    
+
     /**
      * The method serialized object to an array.
      */
@@ -438,7 +436,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
             'tags'      => $this->getTags(),
             'code'      => $this->getCode(),
             'data'      => $this->getExceptionData(),
-            'previous'  => self::serializeToArray($this->getPrevious())
+            'previous'  => self::serializeToArray($this->getPrevious()),
         ];
     }
 

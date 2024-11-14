@@ -10,7 +10,7 @@ namespace IfCastle\Exceptions;
  * Traits
  * throws that exception).
  */
-class ContractNotCorrect        extends LoggableException
+class ContractNotCorrect extends LoggableException
 {
     public const string PROPERTY = 'property';
 
@@ -19,7 +19,7 @@ class ContractNotCorrect        extends LoggableException
     public const string METHOD = 'method';
 
     protected string $template  = 'Contract is not correctly for {type} in the trait {trait} which used by {object}';
-    
+
     /**
      * The Contract is not correct.
      *
@@ -29,7 +29,7 @@ class ContractNotCorrect        extends LoggableException
      * @param string|null $trait  trait name
      * @param string      $notice extended message
      */
-    public function __construct(object $object, $type = self::PROPERTY, $value = null, string $trait = null, string $notice = '')
+    public function __construct(object $object, $type = self::PROPERTY, $value = null, ?string $trait = null, string $notice = '')
     {
         parent::__construct([
             'message'       => $notice,

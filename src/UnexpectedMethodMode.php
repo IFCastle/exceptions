@@ -10,7 +10,7 @@ namespace IfCastle\Exceptions;
 class UnexpectedMethodMode extends LoggableException
 {
     protected string $template      = 'Unexpected method mode occurred (method: {method}, mode: {mode} = {value})';
-    
+
     /**
      * The method does not support this mode of work.
      *
@@ -20,7 +20,7 @@ class UnexpectedMethodMode extends LoggableException
      * @param string|null     $mode                 Name of mode
      * @param string|int|null $value                Mode value
      */
-    public function __construct(array|string $method, string $mode   = null, string|int $value  = null)
+    public function __construct(array|string $method, ?string $mode   = null, string|int|null $value  = null)
     {
         if (!\is_scalar($method)) {
             parent::__construct($method);

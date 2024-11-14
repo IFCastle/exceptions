@@ -10,7 +10,7 @@ namespace IfCastle\Exceptions;
 class UnexpectedValueType extends LoggableException
 {
     protected string $template      = 'Unexpected type occurred for the value {name} and type {type}. Expected {expected}';
-    
+
     /**
      * Value of variable has unexpected type.
      *

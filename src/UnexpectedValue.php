@@ -10,7 +10,7 @@ namespace IfCastle\Exceptions;
 class UnexpectedValue extends LoggableException
 {
     protected string $template      = 'Unexpected value {value} occurred in the variable {name}';
-    
+
     /**
      * The variable has an unexpected value!
      *

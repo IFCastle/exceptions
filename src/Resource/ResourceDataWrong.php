@@ -10,8 +10,6 @@ class ResourceDataWrong extends ResourceException
 
     /**
      * @param string|object|resource|array<string, scalar|scalar[]> $resource
-     * @param string $type
-     * @param string $format
      */
     public function __construct(mixed $resource, string $type = 'resource', string $format = 'format')
     {

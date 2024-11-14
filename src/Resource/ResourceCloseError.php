@@ -8,7 +8,6 @@ class ResourceCloseError extends ResourceException
 {
     /**
      * @param string|object|resource|array<string, scalar|scalar[]> $resource
-     * @param $type
      */
     public function __construct(mixed $resource, string $type = 'resource')
     {

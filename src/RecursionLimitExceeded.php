@@ -21,7 +21,7 @@ class RecursionLimitExceeded extends LoggableException
         if (!\is_scalar($limit)) {
             parent::__construct($limit);
         } else {
-            parent::__construct(['limit' => (int)$limit]);
+            parent::__construct(['limit' => (int) $limit]);
         }
     }
 }

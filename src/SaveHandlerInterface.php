@@ -8,7 +8,6 @@ interface SaveHandlerInterface
 {
     /**
      * @param array<\Throwable> $exceptions
-     * @param callable $resetLog
      * @param array<string, mixed> $loggerOptions
      * @param array<string, mixed> $debugOptions
      */

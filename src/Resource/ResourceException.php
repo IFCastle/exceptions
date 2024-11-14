@@ -20,23 +20,21 @@ class ResourceException extends SystemException
 
     /**
      * @param       string|object|resource|array<string, scalar|scalar[]> $resource
-     * @param       string              $operation
-     * @param       string              $type
      */
     public function __construct(mixed $resource, string $type = '', string $operation = '')
     {
         if (\is_array($resource)) {
             parent::__construct($resource);
         } else {
-            
-            if(is_resource($resource)) {
-                $resource = get_resource_type($resource);
-            } elseif(is_object($resource)) {
+
+            if (\is_resource($resource)) {
+                $resource = \get_resource_type($resource);
+            } elseif (\is_object($resource)) {
                 $resource = $resource::class;
-            } elseif(!is_string($resource)) {
+            } elseif (!\is_string($resource)) {
                 $resource = '!unknown!';
             }
-            
+
             parent::__construct([
                 'message'   => $this->resourceSystem() . ' error: operation "' . $operation . '" failed',
                 'resource'  => $resource,
@@ -58,7 +56,6 @@ class ResourceException extends SystemException
 
     /**
      * Method return system of Resource.
-     * @return string
      */
     public function resourceSystem(): string
     {
@@ -68,7 +65,6 @@ class ResourceException extends SystemException
     /**
      * Method return type of Resource.
      *
-     * @return string
      */
     public function resourceType(): string
     {
@@ -78,7 +74,6 @@ class ResourceException extends SystemException
     /**
      * Method return operation.
      *
-     * @return string
      */
     public function resourceOperation(): string
     {

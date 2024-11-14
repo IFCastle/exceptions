@@ -9,10 +9,9 @@ use IfCastle\Exceptions\Resource\ResourceUnLockFailed;
 class FileUnLockFailed extends ResourceUnLockFailed implements FileSystemExceptionInterface
 {
     protected string $system   = self::SYSTEM;
-    
+
     /**
      * @param string|object|resource|array<string, scalar|scalar[]> $resource
-     * @param string $type
      */
     public function __construct(mixed $resource, string $type = 'file')
     {

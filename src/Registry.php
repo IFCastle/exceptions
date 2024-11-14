@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace IfCastle\Exceptions;
 
-use PHPUnit\Event\Code\Throwable;
-
 /**
  * Register of exceptions.
  *
@@ -21,7 +19,7 @@ class Registry
      * Flag for global handler.
      */
     public static bool $isActive = false;
-    
+
     /**
      * Options for logger.
      * @var array<string, scalar|scalar[]>
@@ -111,9 +109,10 @@ class Registry
     {
         if (\is_array(self::$exceptions)) {
             return self::$exceptions;
-        } else {
-            return self::$exceptions->getStorageExceptions();
         }
+
+        return self::$exceptions->getStorageExceptions();
+
     }
 
     /**

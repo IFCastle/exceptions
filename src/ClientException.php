@@ -10,7 +10,6 @@ namespace IfCastle\Exceptions;
 class ClientException extends BaseException implements ClientAvailableInterface
 {
     /**
-     * @param string $template
      * @param array<string, scalar|null|scalar[]>  $parameters
      * @param array<string, scalar|null|scalar[]>  $debugData
      */

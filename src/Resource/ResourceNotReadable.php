@@ -8,7 +8,6 @@ class ResourceNotReadable extends ResourceException
 {
     /**
      * @param string|object|resource|array<string, scalar|scalar[]> $resource
-     * @param string $type
      */
     public function __construct(mixed $resource, string $type = 'resource')
     {

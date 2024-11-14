@@ -24,7 +24,7 @@ trait HelperTrait
         [
             'source'            => $res['class'] ?? $res['file'] . ':' . $res['line'],
             'type'              => $res['type'] ?? '.',
-            'function'          => $res['function'] ?? '{}' // @phpstan-ignore-line
+            'function'          => $res['function'] ?? '{}', // @phpstan-ignore-line
         ];
     }
 

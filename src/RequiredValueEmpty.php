@@ -10,7 +10,7 @@ namespace IfCastle\Exceptions;
 class RequiredValueEmpty extends LoggableException
 {
     protected string $template      = 'The Required value {name} is empty ({expected})';
-    
+
     /**
      * If required value is empty.
      *
@@ -18,7 +18,7 @@ class RequiredValueEmpty extends LoggableException
      *                                                  or array with parameters.
      * @param string|null  $expected                    Excepted type
      */
-    public function __construct(array|string $name, string $expected = null)
+    public function __construct(array|string $name, ?string $expected = null)
     {
         if (!\is_scalar($name)) {
             parent::__construct($name);

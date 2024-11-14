@@ -7,7 +7,7 @@ namespace IfCastle\Exceptions;
 /**
  * If class not implemented required interface.
  */
-class InterfaceNotImplemented       extends LoggableException
+class InterfaceNotImplemented extends LoggableException
 {
     protected string $template      = 'Class {class} does not implement interface {interface}';
 

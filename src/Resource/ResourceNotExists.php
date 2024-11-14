@@ -14,7 +14,7 @@ class ResourceNotExists extends ResourceException
     public function __construct(mixed $resource, string $type = 'resource')
     {
         parent::__construct([
-            'resource'  => $resource,
+            'resource'  => $this->typeInfo($resource),
             'operation' => 'is_' . $type,
             'type'      => $type,
             'system'    => $this->system,

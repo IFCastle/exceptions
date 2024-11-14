@@ -14,7 +14,7 @@ class ResourceDataWrong extends ResourceException
     public function __construct(mixed $resource, string $type = 'resource', string $format = 'format')
     {
         parent::__construct([
-            'resource'  => $resource,
+            'resource'  => $this->typeInfo($resource),
             'type'      => $type,
             'operation' => 'format:' . $format,
             'format'    => $format,

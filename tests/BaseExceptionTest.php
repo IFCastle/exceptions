@@ -41,7 +41,9 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
     /**
      * Exception.
      */
-    protected BaseException $BaseException;
+    protected BaseException $baseException;
+    
+    protected int $line;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -64,7 +66,8 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
             'previous'      => new \Exception('previous message', 123),
         ];
 
-        $this->BaseException = new \IfCastle\Exceptions\BaseException(\array_merge($this->testData, $this->testBaseData));
+        $this->baseException = new \IfCastle\Exceptions\BaseException(\array_merge($this->testData, $this->testBaseData));
+        $this->line         = __LINE__ - 1;
     }
 
     /**
@@ -100,7 +103,7 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         // 1. Container for \Exception
         $exception = new \UnderflowException(
             $this->testBaseData['message'],
-            $this->testBaseData['code']
+            $this->testBaseData['code'],
         );
 
         $e = new \IfCastle\Exceptions\BaseException($exception);
@@ -134,35 +137,35 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
 
     public function testSetLoggable(): void
     {
-        $this->BaseException->setLoggable(true);
-        $this->assertTrue($this->BaseException->isLoggable(), 'Loggable flag must be TRUE');
+        $this->baseException->setLoggable(true);
+        $this->assertTrue($this->baseException->isLoggable(), 'Loggable flag must be TRUE');
 
-        $this->BaseException->setLoggable(false);
-        $this->assertFalse($this->BaseException->isLoggable(), 'Loggable flag must be FALSE');
+        $this->baseException->setLoggable(false);
+        $this->assertFalse($this->baseException->isLoggable(), 'Loggable flag must be FALSE');
 
-        $this->BaseException->setLoggable(true);
-        $this->assertTrue($this->BaseException->isLoggable(), 'Loggable flag must be TRUE');
+        $this->baseException->setLoggable(true);
+        $this->assertTrue($this->baseException->isLoggable(), 'Loggable flag must be TRUE');
     }
 
     public function testGetLevel(): void
     {
         $this->assertEquals(
             $this->testData['level'],
-            $this->BaseException->getLevel(),
-            'BaseException level must be BaseExceptionI::CRITICAL'
+            $this->baseException->getLevel(),
+            'BaseException level must be BaseExceptionI::CRITICAL',
         );
     }
 
     public function testGetSource(): void
     {
-        $this->assertEquals(self::class . '->setUp', \implode('', $this->BaseException->getSource()));
+        $this->assertEquals(self::class . '->setUp', \implode('', $this->baseException->getSource()));
         // called twice for check second call
-        $this->assertEquals(self::class . '->setUp', \implode('', $this->BaseException->getSource()));
+        $this->assertEquals(self::class . '->setUp', \implode('', $this->baseException->getSource()));
     }
 
     public function testGetData(): void
     {
-        $data = $this->BaseException->getExceptionData();
+        $data = $this->baseException->getExceptionData();
 
         $this->assertIsArray($data, 'data must be array');
 
@@ -177,12 +180,14 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
 
     public function testToArray(): void
     {
-        $data           = $this->BaseException->toArray();
+        $data           = $this->baseException->toArray();
 
         $mockup         =
         [
             'type'      => \IfCastle\Exceptions\BaseException::class,
             'source'    => ['source' => static::class, 'type' => '->', 'function' => 'setUp'],
+            'file'      => __FILE__,
+            'line'      => $this->line,
             'message'   => $this->testBaseData['message'],
             'template'  => '',
             'tags'      => [],
@@ -225,6 +230,8 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         [
             'type'      => \Exception::class,
             'source'    => ['source' => static::class, 'type' => '->', 'function' => 'testToArrayForContainer'],
+            'file'      => __FILE__,
+            'line'      => $this->line,
             'message'   => 'test',
             'code'      => 2,
             'data'      => [],
@@ -256,6 +263,8 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         [
             'type'      => \IfCastle\Exceptions\BaseException::class,
             'source'    => ['source' => static::class, 'type' => '->', 'function' => 'testToArrayForContainer2'],
+            'file'      => __FILE__,
+            'line'      => $this->line,
             'message'   => 'test',
             'template'  => '',
             'tags'      => [],
@@ -288,6 +297,8 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         [
             'type'      => UnexpectedValueType::class,
             'source'    => ['source' => static::class, 'type' => '->', 'function' => 'testToArrayForTemplate'],
+            'file'      => __FILE__,
+            'line'      => $this->line,
             'message'   => '',
             'template'  => 'Unexpected type occurred for the value {name} and type {type}. Expected {expected}',
             'code'      => 0,
@@ -367,5 +378,24 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $exception->appendData(['append_data' => 'data']);
 
         $this->assertEquals(['data' => 'test', ['append_data' => 'data']], $exception->getExceptionData());
+    }
+    
+    public function testSerializeToArray(): void
+    {
+        $baseException = new BaseException('message', 0, new \Exception('previous'));
+        
+        $array                      = BaseException::serializeToArray($baseException);
+        
+        $this->assertArrayHasKey('message', $array, 'message key not found');
+        $this->assertArrayHasKey('code', $array, 'code key not found');
+        $this->assertArrayHasKey('file', $array, 'file key not found');
+        $this->assertArrayHasKey('line', $array, 'line key not found');
+        
+        $array                      = BaseException::serializeToArray(new \Exception('Some message'));
+        
+        $this->assertArrayHasKey('message', $array, 'message key not found');
+        $this->assertArrayHasKey('code', $array, 'code key not found');
+        $this->assertArrayHasKey('file', $array, 'file key not found');
+        $this->assertArrayHasKey('line', $array, 'line key not found');
     }
 }

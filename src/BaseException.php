@@ -44,11 +44,11 @@ class BaseException extends \Exception implements BaseExceptionInterface
     use TemplateHandlerTrait;
     
     /**
-     * @param \Throwable|BaseExceptionInterface|null $throwable
+     * @param \Throwable|null $throwable
      *
      * @return array<string, scalar|array<string, scalar[]>>
      */
-    public static function serializeToArray(\Throwable|BaseExceptionInterface|null $throwable = null): array
+    public static function serializeToArray(\Throwable|null $throwable = null): array
     {
         if ($throwable instanceof BaseExceptionInterface) {
             return $throwable->toArray();
@@ -58,8 +58,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
             'message'           => $throwable->getMessage(),
             'code'              => $throwable->getCode(),
             'file'              => $throwable->getFile(),
-            'line'              => $throwable->getLine(),
-            'trace'             => $throwable->getTrace(),
+            'line'              => $throwable->getLine()
         ];
     }
 
@@ -392,6 +391,8 @@ class BaseException extends \Exception implements BaseExceptionInterface
                 [
                     'type'      => $previous::class,
                     'source'    => $this->getSourceFor($previous),
+                    'file'      => $this->getFile(),
+                    'line'      => $this->getLine(),
                     'message'   => $previous->getMessage(),
                     'code'      => $previous->getCode(),
                     'data'      => [],
@@ -412,6 +413,8 @@ class BaseException extends \Exception implements BaseExceptionInterface
         [
             'type'      => static::class,
             'source'    => $this->getSource(),
+            'file'      => $this->getFile(),
+            'line'      => $this->getLine(),
             'message'   => $message,
             'template'  => $this->getTemplate(),
             'tags'      => $this->getTags(),

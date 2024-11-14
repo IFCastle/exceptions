@@ -11,6 +11,6 @@ class ResourceExceptionTest extends TestCase
     public function testResourceException(): void
     {
         $resourceException = new ResourceException('Resource exception message');
-        $this->assertEquals("'undefined' error: operation '' for the resource 'Resource exception message' ('') is failed. undefined error: operation \"\" failed", $resourceException->getMessage());
+        $this->assertEquals("'undefined' error: operation '' for the resource 'Resource exception message' ('') is failed", $resourceException->getMessage());
     }
 }

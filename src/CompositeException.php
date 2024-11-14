@@ -6,7 +6,7 @@ namespace IfCastle\Exceptions;
 
 class CompositeException extends LoggableException
 {
-    public function __construct(string $message = 'Multiple exceptions occurred', \Throwable ...$exceptions)
+    public function __construct(string $message = '', \Throwable ...$exceptions)
     {
         $previous                   = null;
 
@@ -15,9 +15,9 @@ class CompositeException extends LoggableException
         }
 
         parent::__construct([
-            'template'              => 'Multiple exceptions occurred {context}',
-            'context'               => $message,
-            'exceptions'            => $exceptions,
+            'template'              => 'Multiple exceptions occurred',
+            'message'               => $message,
+            'exceptions'            => \array_map(self::serializeToArray(...), $exceptions),
             'previous'              => $previous,
         ]);
     }

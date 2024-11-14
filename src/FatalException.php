@@ -7,7 +7,7 @@ namespace IfCastle\Exceptions;
 /**
  * Fatal exception - container.
  *
- * The class used as container for another exceptions.
+ * The class used as container for another exception.
  *
  * It is marked $exception as "fatal" and logged its
  *

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IfCastle\Exceptions;
 
 /**
- * If object not initialized
+ * If an object isn't initialized
  * but using!
  */
 class ObjectNotInitialized extends LoggableException

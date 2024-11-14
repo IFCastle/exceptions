@@ -15,12 +15,12 @@ class ClientExceptionTest extends TestCase
             ['parameter1' => 'value1', 'parameter2' => 'value2'],
             ['debug' => 'debug'],
         );
-        
+
         $this->assertEquals('The exception with \'value1\', \'value2\'', $exception->getMessage());
         $this->assertEquals('The exception with {parameter1}, {parameter2}', $exception->getClientMessage());
         $this->assertEquals('The exception with {parameter1}, {parameter2}', $exception->getTemplate());
     }
-    
+
     public function testClientSerialize(): void
     {
         $exception                  = new ClientException(
@@ -28,11 +28,11 @@ class ClientExceptionTest extends TestCase
             ['parameter1' => 'value1', 'parameter2' => 'value2'],
             ['debug' => 'debug'],
         );
-        
+
         $this->assertEquals('The exception with \'value1\', \'value2\'', $exception->getMessage());
         $this->assertEquals('The exception with {parameter1}, {parameter2}', $exception->getClientMessage());
         $this->assertEquals('The exception with {parameter1}, {parameter2}', $exception->getTemplate());
-        
+
         $this->assertEquals([
             'message'       => 'The exception with \'value1\', \'value2\'',
             'template'      => 'The exception with {parameter1}, {parameter2}',

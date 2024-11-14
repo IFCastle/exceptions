@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IfCastle\Exceptions;
 
 /**
- * Raise if the method can not be called.
+ * Raise if the method cannot be called.
  */
 class MethodNotCallable extends LogicalException
 {

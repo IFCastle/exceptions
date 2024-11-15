@@ -12,7 +12,7 @@ class InterfaceNotImplementedTest extends TestCase
     {
         $exception = new InterfaceNotImplemented('myClassName', 'Interface');
         $this->assertEquals("Class 'myClassName' does not implement interface 'Interface'", $exception->getMessage());
-        
+
         $exception = new InterfaceNotImplemented(new \stdClass(), 'Interface');
         $this->assertEquals("Class 'stdClass' does not implement interface 'Interface'", $exception->getMessage());
     }

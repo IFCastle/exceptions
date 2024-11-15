@@ -38,7 +38,7 @@ class Error extends \ErrorException implements BaseExceptionInterface
     /**
      * @var mixed[]|null
      */
-    protected ?array $trace = null;
+    protected ?array $trace         = null;
 
     /**
      * Loggable flag.
@@ -206,9 +206,9 @@ class Error extends \ErrorException implements BaseExceptionInterface
     }
 
     #[\Override]
-    public function toArray(): array
+    public function toArray(bool $withTrace = false): array
     {
-        return
+        $res =
         [
             'type'      => static::class,
             'source'    => $this->getSource(),
@@ -218,6 +218,12 @@ class Error extends \ErrorException implements BaseExceptionInterface
             'code'      => $this->getCode(),
             'data'      => [],
         ];
+
+        if ($withTrace) {
+            $res['trace'] = $this->trace ?? [];
+        }
+
+        return $res;
     }
 
     #[\Override]

@@ -179,9 +179,9 @@ interface BaseExceptionInterface extends \Throwable
     public function getDebugData(): array;
 
     /**
-     * The method serialized object to an array.
+     * The method serialized exception to an array.
      *
      * @return  array<string, scalar|scalar[]>
      */
-    public function toArray(): array;
+    public function toArray(bool $withTrace = false): array;
 }

@@ -11,7 +11,7 @@ class ResourceDataWrongTest extends TestCase
     public function test(): void
     {
         $exception                  = new ResourceDataWrong('resource', 'string', 'string');
-        
+
         $this->assertEquals([
             'resource' => 'resource',
             'type' => 'string',

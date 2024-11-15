@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.2.0] - 2024-11-15
 
+### Added
+- Adding exception trace in `OpenTelemetry` format during array serialization.
+
 ### Changed
 
 - Exception messages have been corrected. Additional tests have been added.

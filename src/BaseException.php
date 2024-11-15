@@ -46,7 +46,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
      *
      * @return array<string, scalar|array<string, scalar[]>>|null
      */
-    public static function serializeToArray(\Throwable|null $throwable = null, int $recursion = 0): array|null
+    public static function serializeToArray(\Throwable|null $throwable = null, bool $withTrace = false, int $recursion = 0): array|null
     {
         if ($throwable === null) {
             return null;
@@ -64,7 +64,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
         }
 
         if ($throwable instanceof BaseExceptionInterface) {
-            return $throwable->toArray();
+            return $throwable->toArray($withTrace);
         }
 
         return [
@@ -73,8 +73,72 @@ class BaseException extends \Exception implements BaseExceptionInterface
             'source'            => self::getSourceFor($throwable),
             'file'              => $throwable->getFile(),
             'line'              => $throwable->getLine(),
-            'previous'          => self::serializeToArray($throwable->getPrevious(), $recursion + 1),
+            'previous'          => self::serializeToArray($throwable->getPrevious(), $withTrace, $recursion + 1),
         ];
+    }
+
+    /**
+     * Returns the trace formatted for exception.
+     * This code replicates a similar formatting algorithm from the OpenTelemetry library.
+     *
+     * Returns an array of strings like:
+     * [
+     *      /path/to/your/script.php(10): YourClass->yourMethod
+     *      /path/to/your/script.php(10): YourClass::yourMethod
+     *      /path/to/your/script.php(10): your_function
+     * ]
+     *
+     * @return string[]
+     */
+    public static function formatTrace(\Throwable $throwable): array
+    {
+        $isFirst                    = true;
+        $trace                      = [];
+
+        // remove all arguments from trace
+        foreach ($throwable->getTrace() as $item) {
+
+            if ((empty($item['file']) || empty($item['line'])) && $isFirst) {
+                $isFirst        = false;
+                $item['file']   = $throwable->getFile();
+                $item['line']   = $throwable->getLine();
+            }
+
+            // Trace format
+            // /path/to/your/script.php(10): YourClass->yourMethod()
+            // or
+            // /path/to/your/script.php(10): YourClass::yourMethod()
+            // or
+            // /path/to/your/script.php(10): your_function()
+
+            if (empty($item['file']) && empty($item['line'])) {
+
+                $item['line']       = '?';
+
+                if (!empty($item['class'])) {
+                    $item['file']   = $item['class'];
+                    $item['class']  = '';
+                    $item['function'] = $item['type'] . $item['function'];
+                }
+
+                continue;
+            }
+
+            // If class defined remove namespace:
+            if (isset($item['class'])) {
+                $class          = \strrchr($item['class'], '\\');
+
+                if (\is_string($class)) {
+                    $item['class']  = \substr($class, 1);
+                }
+
+                $trace[]        = $item['file'] . '(' . $item['line'] . '): ' . $item['class'] . $item['type'] . $item['function'];
+            } else {
+                $trace[]        = $item['file'] . '(' . $item['line'] . '): ' . $item['function'];
+            }
+        }
+
+        return $trace;
     }
 
     /**
@@ -393,14 +457,14 @@ class BaseException extends \Exception implements BaseExceptionInterface
      * The method serialized object to an array.
      */
     #[\Override]
-    public function toArray(): array
+    public function toArray(bool $withTrace = false): array
     {
         // If this exception is container, then it returns data of container.
         if ($this->isContainer()) {
             $previous       = $this->getPreviousException();
 
             if ($previous instanceof BaseExceptionInterface) {
-                $res        = $previous->toArray();
+                $res        = $previous->toArray($withTrace);
             } else {
                 $res =
                 [
@@ -413,6 +477,10 @@ class BaseException extends \Exception implements BaseExceptionInterface
                     'data'      => [],
                     'previous'  => self::serializeToArray($previous->getPrevious()),
                 ];
+
+                if ($withTrace) {
+                    $res['trace'] = self::formatTrace($previous);
+                }
             }
 
             if (empty($res['container'])) {
@@ -425,7 +493,7 @@ class BaseException extends \Exception implements BaseExceptionInterface
         // override the exception message if the template was defined
         $message = $this->getTemplate() !== '' ? $this->getExceptionData()['message'] ?? '' : $this->getMessage();
 
-        return
+        $res =
         [
             'type'      => static::class,
             'source'    => $this->getSource(),
@@ -438,6 +506,12 @@ class BaseException extends \Exception implements BaseExceptionInterface
             'data'      => $this->getExceptionData(),
             'previous'  => self::serializeToArray($this->getPrevious()),
         ];
+
+        if ($withTrace) {
+            $res['trace'] = self::formatTrace($this);
+        }
+
+        return $res;
     }
 
     /**

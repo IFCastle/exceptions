@@ -23,7 +23,7 @@ class InterfaceNotImplemented extends LoggableException
             parent::__construct($class);
         } else {
             parent::__construct([
-                'class'     => is_string($class) ? $class : $this->typeInfo($class),
+                'class'     => \is_string($class) ? $class : $this->typeInfo($class),
                 'interface' => $interface,
             ]);
         }

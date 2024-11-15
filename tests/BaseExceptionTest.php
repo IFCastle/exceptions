@@ -419,4 +419,18 @@ class BaseExceptionTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('file', $array, 'file key not found');
         $this->assertArrayHasKey('line', $array, 'line key not found');
     }
+
+    public function testSerializeToArrayWithTrace(): void
+    {
+        $baseException = new BaseException('message', 0, new \Exception('previous'));
+
+        $array                      = BaseException::serializeToArray($baseException, true);
+
+        $this->assertArrayHasKey('message', $array, 'message key not found');
+        $this->assertArrayHasKey('source', $array, 'source key not found');
+        $this->assertArrayHasKey('code', $array, 'code key not found');
+        $this->assertArrayHasKey('file', $array, 'file key not found');
+        $this->assertArrayHasKey('line', $array, 'line key not found');
+        $this->assertArrayHasKey('trace', $array, 'trace key not found');
+    }
 }

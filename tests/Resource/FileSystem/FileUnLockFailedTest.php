@@ -11,12 +11,12 @@ class FileUnLockFailedTest extends TestCase
     public function test(): void
     {
         $exception = new FileUnLockFailed('file', 'string');
-        
+
         $this->assertEquals([
             'resource' => 'file',
             'type' => 'string',
             'operation' => 'unlock',
-            'system' => 'FileSystem'
+            'system' => 'FileSystem',
         ], $exception->getExceptionData());
     }
 }

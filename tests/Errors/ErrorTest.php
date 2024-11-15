@@ -13,7 +13,7 @@ class ErrorTest extends TestCase
     {
         $line = __LINE__ + 1;
         $error = Error::createError(E_ERROR, 'This is an error', __FILE__, __LINE__);
-        
+
         $this->assertEquals(E_ERROR, $error->getSeverity());
         $this->assertEquals('This is an error', $error->getMessage());
         $this->assertEquals(__FILE__, $error->getFile());
@@ -25,7 +25,7 @@ class ErrorTest extends TestCase
             'function' => '',
         ], $error->getSource());
     }
-    
+
     public function testCreateFromLastError(): void
     {
         $line = __LINE__ + 1;
@@ -35,7 +35,7 @@ class ErrorTest extends TestCase
             'file' => __FILE__,
             'line' => $line,
         ]);
-        
+
         $this->assertEquals(E_ERROR, $error->getSeverity());
         $this->assertEquals('This is an error', $error->getMessage());
         $this->assertEquals(__FILE__, $error->getFile());
@@ -47,12 +47,12 @@ class ErrorTest extends TestCase
             'function' => '',
         ], $error->getSource());
     }
-    
+
     public function testToArray(): void
     {
         $line                       = __LINE__ + 1;
         $error                      = Error::createError(E_ERROR, 'This is an error', __FILE__, $line);
-        
+
         $this->assertEquals([
             'type'                  => Error::class,
             'source'                =>

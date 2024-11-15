@@ -9,7 +9,7 @@ namespace IfCastle\Exceptions;
  */
 class RequiredValueEmpty extends LoggableException
 {
-    protected string $template      = 'The Required value {name} is empty ({expected})';
+    protected string $template      = 'The Required value {name} is empty (expected: {expected})';
 
     /**
      * If required value is empty.

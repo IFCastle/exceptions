@@ -9,7 +9,7 @@ namespace IfCastle\Exceptions;
  */
 class SerializeException extends LoggableException
 {
-    protected string $template      = 'Serialize process was failed (type:{type}, object:{object}, src:{srcObject}). {reason}';
+    protected string $template      = 'Serialize process was failed (type:{type}, object:{object}, src:{srcObject})';
 
     /**
      * Object can't be serialized!
@@ -27,8 +27,7 @@ class SerializeException extends LoggableException
         }
 
         parent::__construct([
-            'message'       => 'Serialize Failed',
-            'reason'        => $reason,
+            'message'       => $reason,
             'type'          => $type,
             'object'        => $this->typeInfo($object),
             'srcObject'     => $this->typeInfo($srcObject),

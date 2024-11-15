@@ -21,7 +21,7 @@ class ClassNotExist extends LoggableException
         if (!\is_scalar($class)) {
             parent::__construct($class);
         } else {
-            parent::__construct(['class'   => $class ]);
+            parent::__construct(['class' => $class]);
         }
     }
 }
